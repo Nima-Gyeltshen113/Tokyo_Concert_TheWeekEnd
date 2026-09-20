@@ -1,0 +1,3611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tokyo After Dark</title>
+  <style>
+    :root {
+      --bg: #f7f5f2;
+      --paper: #ffffff;
+      --ink: #151515;
+      --muted: #666;
+      --accent: #a3122a;
+      --line: #e9e2db;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    body {
+      padding: 32px 18px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      padding: 42px 52px 36px 52px;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, #0f0f11, #1a1a1d 30%, #2f1a20 70%, #0b0b0d);
+      color: #f5f2ef;
+      border: none;
+      box-shadow: none;
+      padding: 48px;
+    }
+
+    .cover-inner {
+      max-width: 680px;
+    }
+
+    h1 {
+      font-size: 48px;
+      line-height: 1.16;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 18px 0;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #e7d7db;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .byline {
+      font-size: 15px;
+      color: #ddd;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 14px;
+    }
+
+    .cover-btn {
+      display: inline-block;
+      margin-top: 36px;
+      padding: 12px 28px;
+      border: 1px solid #f5f2ef;
+      color: #f5f2ef;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .cover-btn:hover {
+      background: #f5f2ef;
+      color: var(--ink);
+    }
+
+    /* Tracklist Directory */
+    .tracklist-title {
+      font-size: 26px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin: 0 0 8px 0;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 10px;
+    }
+
+    .tracklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 24px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .tracklist-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .track-item {
+      display: flex;
+      align-items: baseline;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 6px 8px;
+      border-bottom: 1px dashed var(--line);
+      font-size: 14px;
+      border-radius: 3px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .track-item:hover {
+      background: #f0eae4;
+      color: var(--accent);
+    }
+
+    .track-num {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--muted);
+      width: 28px;
+      flex-shrink: 0;
+    }
+
+    /* Per-page Navigation Header */
+    .page-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .page-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .page-nav a:hover {
+      text-decoration: underline;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .song {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      margin-bottom: 24px;
+    }
+
+    .song-title {
+      font-size: 20px;
+      margin: 0 0 14px 0;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      font-weight: 700;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 6px;
+    }
+
+    .lyrics {
+      white-space: pre-line;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #212121;
+      margin: 0;
+    }
+
+    .copyright {
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    /* Screen View Switcher */
+    @media screen {
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+    }
+
+    /* Print Document Compatibility */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .page {
+        display: block !important;
+        max-width: none;
+        width: 100%;
+        margin: 0;
+        box-shadow: none;
+        border: none;
+        padding: 28mm 22mm;
+      }
+
+      .cover {
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .page-nav, .cover-btn {
+        display: none !important;
+      }
+
+      .song {
+        margin-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover Section -->
+  <section class="page cover" id="cover">
+    <div class="cover-inner">
+      <h1>Tokyo After Dark</h1>
+      <div class="subtitle">Lyric Booklet Inspired by a Tokyo Concert Setlist</div>
+      <div class="byline">40 Selected Tracks</div>
+      <div class="byline">Print &amp; Screen Interactive Edition</div>
+      <a href="#tracklist" class="cover-btn">View Setlist Directory &rarr;</a>
+    </div>
+  </section>
+
+  <!-- Tracklist Directory -->
+  <section class="page" id="tracklist">
+    <h2 class="tracklist-title">Setlist Directory</h2>
+    <div class="tracklist-grid">
+      <a class="track-item" href="#song-1"><span class="track-num">01</span><span>Professional</span></a>
+      <a class="track-item" href="#song-2"><span class="track-num">02</span><span>Open Hearts</span></a>
+      <a class="track-item" href="#song-3"><span class="track-num">03</span><span>Wake Me Up</span></a>
+      <a class="track-item" href="#song-4"><span class="track-num">04</span><span>After Hours</span></a>
+      <a class="track-item" href="#song-5"><span class="track-num">05</span><span>Starboy</span></a>
+      <a class="track-item" href="#song-6"><span class="track-num">06</span><span>Heartless</span></a>
+      <a class="track-item" href="#song-7"><span class="track-num">07</span><span>Belong to the World</span></a>
+      <a class="track-item" href="#song-8"><span class="track-num">08</span><span>Cry for Me</span></a>
+      <a class="track-item" href="#song-9"><span class="track-num">09</span><span>São Paulo</span></a>
+      <a class="track-item" href="#song-10"><span class="track-num">10</span><span>Until We’re Skin &amp; Bones</span></a>
+      <a class="track-item" href="#song-11"><span class="track-num">11</span><span>Take My Breath</span></a>
+      <a class="track-item" href="#song-12"><span class="track-num">12</span><span>Sacrifice</span></a>
+      <a class="track-item" href="#song-13"><span class="track-num">13</span><span>How Do I Make You Love Me?</span></a>
+      <a class="track-item" href="#song-14"><span class="track-num">14</span><span>Tokyo</span></a>
+      <a class="track-item" href="#song-15"><span class="track-num">15</span><span>Can’t Feel My Face</span></a>
+      <a class="track-item" href="#song-16"><span class="track-num">16</span><span>Lost in the Fire</span></a>
+      <a class="track-item" href="#song-17"><span class="track-num">17</span><span>Kiss Land</span></a>
+      <a class="track-item" href="#song-18"><span class="track-num">18</span><span>Often</span></a>
+      <a class="track-item" href="#song-19"><span class="track-num">19</span><span>Given Up on Me</span></a>
+      <a class="track-item" href="#song-20"><span class="track-num">20</span><span>I Was Never There</span></a>
+      <a class="track-item" href="#song-21"><span class="track-num">21</span><span>Given Up on Me (Reprise)</span></a>
+      <a class="track-item" href="#song-22"><span class="track-num">22</span><span>The Hills</span></a>
+      <a class="track-item" href="#song-23"><span class="track-num">23</span><span>Timeless</span></a>
+      <a class="track-item" href="#song-24"><span class="track-num">24</span><span>Creepin’</span></a>
+      <a class="track-item" href="#song-25"><span class="track-num">25</span><span>Popular</span></a>
+      <a class="track-item" href="#song-26"><span class="track-num">26</span><span>One of the Girls</span></a>
+      <a class="track-item" href="#song-27"><span class="track-num">27</span><span>Zankoku na Tenshi no Thesis</span></a>
+      <a class="track-item" href="#song-28"><span class="track-num">28</span><span>Out of Time</span></a>
+      <a class="track-item" href="#song-29"><span class="track-num">29</span><span>I Feel It Coming</span></a>
+      <a class="track-item" href="#song-30"><span class="track-num">30</span><span>Die for You</span></a>
+      <a class="track-item" href="#song-31"><span class="track-num">31</span><span>Is There Someone Else?</span></a>
+      <a class="track-item" href="#song-32"><span class="track-num">32</span><span>Wicked Games</span></a>
+      <a class="track-item" href="#song-33"><span class="track-num">33</span><span>Call Out My Name</span></a>
+      <a class="track-item" href="#song-34"><span class="track-num">34</span><span>The Abyss</span></a>
+      <a class="track-item" href="#song-35"><span class="track-num">35</span><span>Save Your Tears</span></a>
+      <a class="track-item" href="#song-36"><span class="track-num">36</span><span>Less Than Zero</span></a>
+      <a class="track-item" href="#song-37"><span class="track-num">37</span><span>Blinding Lights</span></a>
+      <a class="track-item" href="#song-38"><span class="track-num">38</span><span>Adaptation</span></a>
+      <a class="track-item" href="#song-39"><span class="track-num">39</span><span>House of Balloons</span></a>
+      <a class="track-item" href="#song-40"><span class="track-num">40</span><span>Moth to a Flame</span></a>
+    </div>
+  </section>
+
+  <!-- Track Pages -->
+  <section class="page" id="song-1">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-2">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">1. Professional</h3>
+      <div class="lyrics"><[Part I]
+
+[Verse: The Weeknd]
+It's ideal, oh
+You need someone to tell you how to feel
+And you think your happiness is real
+There's so much more the world has to reveal
+But you choose to be concealed
+So you're somebody now
+But what's a somebody in a nobody town?
+I don't think you even know it
+So you're somebody now
+But what's a somebody in a nobody town?
+You made enough to quit a couple years ago
+But it consumes you
+It's everywhere you go
+And just the thought alone got you trippin'
+Got you losing your mind
+And I don't blame you
+And I don't blame you
+It's everything you know
+But I own this time, this ain't new
+Now I decide when we're through
+[Part II]
+
+[Chorus: Emika]
+I love, you love
+This love
+We're professional
+I know, you know
+We're sophisticated
+At loving, loving, loving, loving, loving, loving, loving, loving, loving
+We're professional
+
+[Verse 1: The Weeknd]
+What does it mean, oh
+When your heart's already numb?
+You're professional
+Won't treat it like it's personal
+No, 'cause it's just love
+It always makes its way back around
+It's dispensable
+To fall is unacceptable
+'Cause everything you've been through made you stronger
+And every day, you learn about yourself
+And nothing really played out how it's s'posed to
+Depending on somebody else's wealth
+But now you know the value of a dollar
+And girl, I make enough of it to spend
+I love the way you put yourself together
+I love the way you make that body bend
+For me again, oh, yeah
+[Chorus: Emika]
+I love, you love
+This love
+We're professional
+I know, you know
+We're sophisticated
+At loving, loving, loving, loving, loving, loving, loving, loving, loving
+
+[Verse 2: The Weeknd]
+All of those nights you were up barely holding your own
+Girl, you've got it made
+Had you blaming yourself for when life did you wrong
+Now, you've got it made
+Getting rich to the drums of your favorite song
+Girl, you've got it made
+'Cause your freedom was here in this cage all 
+along
+Oooh, how'd you drain all the soul from your eyes?
+How'd you teach, teach yourself how to smile
+In a world where your dreams can't be real, no?
+Every touch that you sell is a lie
+
+[Outro: Emika]
+I love, you love
+This love
+We're professional
+I know, you know
+We're sophisticated
+At loving, loving, loving, loving, loving, loving, loving, loving, loving
+We're professional
+We're professional></div>
+    </div>
+  </section>
+
+  <section class="page" id="song-2">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-1">&larr; Prev</a><a href="#song-3">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">2. Open Hearts</h3>
+      <div class="lyrics">[Verse 1]
+I can hear the wind blow, even through the window
+I can hear the whisper, even with my ears closed
+All the silver and gold only made my skin cold
+I told myself I would never get old, then you pulled me in close
+Oh, oh, oh
+
+[Pre-Chorus]
+Falling, angels call my name
+But the things you say
+Keeps me alive again
+
+[Chorus]
+Where do I start
+When I open my heart?
+It's never easy falling in love again
+Cover my scars
+When I open my arms
+It's never еasy falling in love again
+
+[Post-Chorus]
+Falling in, falling in love
+It's nevеr easy falling in love again
+Falling in, falling in love
+Falling in love again
+
+[Verse 2]
+Trapped inside a limbo, watching through a window of my soul
+Suffering, I've been low, then I seen your halo
+Oh, oh, oh
+
+[Pre-Chorus]
+Falling, angels call my name
+But the things you say
+Keeps me alive for another day
+
+[Chorus]
+Where do I start
+When I open my heart?
+It's never easy falling in love again
+Cover my scars (Cover my scars)
+When I open my arms (Open my arms)
+It's never easy falling in love again (Oh)
+
+[Post-Chorus]
+Falling in, falling in love
+It's never easy falling in love again
+Falling in, falling in love (Oh)
+Falling in love again</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-3">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-2">&larr; Prev</a><a href="#song-4">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">3. Wake Me Up</h3>
+      <div class="lyrics">[Part I]
+
+[Verse]
+All I have is my legacy
+I been losing my memory
+No afterlife, no other side
+I'm all alone when it fades to black
+Fades to black
+No afterlife, no other side
+I'm all alone when it fades
+Play smile, live fully
+When life is hard
+I know death's easy
+Woah
+
+[Part II]
+
+[Verse 1]
+Sun is never rising
+I don't know if it's day or night (Or night)
+And I can't find the horizon (Horizon)
+I'm running out of time (Time)
+
+[Pre-Chorus]
+Are you real, or are you an illusion?
+'Cause I fear your love's my delusion
+
+[Chorus]
+Wake me up, come find me
+It feels like I'm dying
+Wake me up, these demons
+Keep creeping, don't fear 'em
+Wake me up
+
+[Post-Chorus]
+Ooh, ooh-ooh
+
+[Verse 2]
+It's coming to the wire
+I'm feeling like I'm paralyzed
+Cleanse me with your fire (Hey)
+Open up my eyes
+
+Pre-Chorus]
+Are you real (Are you real?), or are you an illusion?
+'Cause I fear your love's my delusion
+
+[Chorus]
+Wake me up, come find me
+It feels like I'm dying (Ooh-woah)
+Wake me up, these demons (These demons)
+Keep creeping (Keep creeping), don't fear 'em (Ooh-woah)
+Wake me up, 'cause I'm trying (I'm trying)
+This sleep is (This sleep is) paralyzing (Oh)
+Wake me up, 'cause I'm dreaming (I'm dreaming)
+It feels so (Hey) damn real (Hey)
+Wake me up
+
+[Outro]
+Oh-oh-oh-oh
+Oh-oh-oh</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-4">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-3">&larr; Prev</a><a href="#song-5">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">4. After Hours</h3>
+      <div class="lyrics">[Verse 1]
+Thought I almost died in my dream again (Baby, almost died)
+Fightin' for my life, I couldn't breathe again
+I'm fallin' in too deep (Oh, oh)
+Without you, I can't sleep (Fallin' in)
+'Cause my heart belongs to you
+I'll risk it all for you
+I want you next to me
+This time, I'll never leave
+I wanna share babies
+Protection, we won't need
+Your body next to me
+Is just a memory
+I'm fallin' in too deep, oh
+Without you, I can't sleep
+Insomnia relieve, oh
+Talk to me, without you, I can't breathe
+
+[Verse 2]
+My darkest hours
+Girl, I felt so alone inside of this crowded room
+Different girls on the floor, distractin' my thoughts of you
+I turned into the man I used to be, to be
+Put myself to sleep
+Just so I can get closer to you inside my dreams
+Didn't wanna wake up 'less you were beside me
+I just wanted to call you and say, and say
+
+[Chorus]
+Oh, baby
+Where are you now when I need you most?
+I'd give it all just to hold you close
+Sorry that I broke your heart, your heart
+
+[Verse 3]
+Never comin' down, uh
+I was running away from facin' reality, uh
+Wastin' all of my time out living my fantasies
+Spendin' money to compensate, compensate
+'Cause I want you, baby, uh
+I be livin' in heaven when I'm inside of you
+It was simply a blessing wakin' beside you
+I'll never let you down again, again
+
+[Chorus]
+Oh, baby
+Where are you now when I need you most?
+I'd give it all just to hold you close
+Sorry that I broke your heart, your heart
+I said, baby
+I'll treat you better than I did before
+I'll hold you down and not let you go
+This time, I won't break your heart, your heart, yeah
+
+[Bridge]
+I know it's all my fault
+Made you put down your guard
+I know I made you fall
+Then said you were wrong for me
+I lied to you, I lied to you, I lied to you (To you)
+Can't hide the truth, I'd stay with her in spite of you
+You did some things that you regret, still ride for you
+'Cause this house is not a home
+
+[Chorus]
+Without my baby
+Where are you now when I need you most?
+I gave it all just to hold you close
+Sorry that I broke your heart, your heart
+And I said, baby
+I'll treat you better than I did before
+I'll hold you down and not let you go
+This time, I won't break your heart, your heart, no</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-5">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-4">&larr; Prev</a><a href="#song-6">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">5. Starboy</h3>
+      <div class="lyrics">[Intro]
+Ayy
+
+[Verse 1]
+I'm tryna put you in the worst mood, ah
+P1 cleaner than your church shoes, ah
+Milli point two just to hurt you, ah
+All red Lamb' just to tease you, ah
+None of these toys on lease too, ah
+Made your whole year in a week too, yah
+Main bitch outta your league too, ah
+Side bitch outta your league too, ah
+
+Pre-Chorus]
+House so empty, need a centerpiece
+Twenty racks a table, cut from ebony
+Cut that ivory into skinny pieces
+Then she clean it with her face, man, I love my baby, ah
+You talkin' money, need a hearin' aid
+You talkin' 'bout me, I don't see the shade
+Switch up my style, I take any lane
+I switch up my cup, I kill any pain
+
+[Chorus]
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+
+[Verse 2]
+Every day, a nigga try to test me, ah
+Every day, a nigga try to end me, ah
+Pull off in that Roadster SV, ah
+Pockets overweight, gettin' hefty, ah
+Comin' for the king, that's a far cry, I
+I come alive in the fall time, I
+The competition, I don't really listen
+I'm in the blue Mulsanne, bumpin' New Edition
+
+[Pre-Chorus]
+House so empty, need a centerpiece
+Twenty racks a table, cut from ebony
+Cut that ivory into skinny pieces
+Then she clean it with her face, man, I love my baby, ah
+You talkin' money, need a hearin' aid
+You talkin' 'bout me, I don't see the shade
+Switch up my style, I take any lane
+I switch up my cup, I kill any pain
+
+[Chorus]
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+
+[Verse 3]
+Let a nigga brag Pitt
+Legend of the fall, took the year like a bandit
+Bought Mama a crib and a brand new wagon
+Now she hit the grocery shop lookin' lavish
+Star Trek roof in that Wraith of Khan
+Girls get loose when they hear this song
+A hundred on the dash get me close to God
+We don't pray for love, we just pray for cars
+[Pre-Chorus]
+House so empty, need a centerpiece
+Twenty racks a table, cut from ebony
+Cut that ivory into skinny pieces
+Then she clean it with her face, man, I love my baby, ah
+You talkin' money, need a hearin' aid
+You talkin' 'bout me, I don't see the shade
+Switch up my style, I take any lane
+I switch up my cup, I kill any pain
+
+[Chorus]
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+Look what you've done
+(Ha-ha-ha-ha-ha, ha-ha-ha-ha-ha)
+I'm a motherfuckin' starboy
+</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-6">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-5">&larr; Prev</a><a href="#song-7">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">6. Heartless</h3>
+      <div class="lyrics">[Intro]
+Young Metro, young Metro, young Metro (Sheesh)
+Ayy (Ayy)
+Young Metro, young Metro
+
+[Verse 1]
+Never need a bitch, I'm what a bitch need (Bitch need)
+Tryna find the one that can fix me
+I've been dodgin' death in the six-speed
+Amphetamine got my stummy feelin' sickly
+Yeah, I want it all now
+I've been runnin' through the pussy, need a dog pound
+Hundred models gettin' faded in the compound
+Tryna love me, but they never get a pulse down.
+
+[Chorus]
+Why? 'Cause I'm heartless
+And I'm back to my ways 'cause I'm heartless
+All this money and this pain got me heartless
+Low life for life 'cause I'm heartless
+Said I'm heartless
+Tryna be a better man, but I'm heartless
+Never be a weddin' plan for the heartless
+Low life for life 'cause I'm heartless
+
+[Verse 2]
+Said I'm heartless
+So much pussy, it be fallin' out the pocket
+Metro Boomin turn this ho into a moshpit
+Tesla pill got me flyin' like a cockpit
+Yeah, I got her watchin'
+Call me up, turn that pussy to a faucet
+Duffle bags full of drugs and a rocket
+Stix drunk, but he never miss a target
+Photoshoots, I'm a star now (Star)
+I'm talkin' Time, Rolling Stone, and Bazaar now (Bazaar now)
+Sellin' dreams to these girls with their guard down (What?)
+Seven years, I've been swimmin' with the sharks now
+
+[Chorus]
+Why? 'Cause I'm heartless
+And I'm back to my ways 'cause I'm heartless
+All this money and this pain got me heartless
+Low life for life 'cause I'm heartless
+Said I'm heartless
+Tryna be a better man, but I'm heartless
+Never be a weddin' plan for the heartless
+Low life for life 'cause I'm heartless
+
+[Bridge]
+I lost my heart and my mind
+I try to always do right
+I thought I lost you this time
+You just came back in my life
+You never gave up on me (Why don't you?)
+I'll never know what you see (Why won't you?)
+I don't do well when alone (Oh yeah)
+You hear it clear in my tone
+
+[Chorus]
+'Cause I'm heartless (Ooh)
+And I'm back to my ways 'cause I'm heartless
+All this money and this pain got me heartless
+Low life for life 'cause I'm heartless
+Said I'm heartless
+Tryna be a better man, but I'm heartless
+Never be a weddin' plan for the heartless
+Low life for life 'cause I'm heartless</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-7">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-6">&larr; Prev</a><a href="#song-8">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">7. Belong to the World</h3>
+      <div class="lyrics">[Music Video Intro]
+The wind in the sky
+Please gather the clouds
+And close the way of the wind
+I need to make the beautiful dancer
+Like a muse, so I can keep looking at her
+Too bad if you forget about me
+I have to live with it
+We swear by God we will be together forever
+Now I'm worried God will take your soul
+Because you broke your promise
+Like the fire which guards light up to search things
+Burns up in the night
+And fades into the daylight
+Just as my love and thoughts of you
+Burn in the night and fade into the sun.
+
+[Verse 1]
+I know you want your money, girl
+'Cause you do this every day, okay
+The way you doubt your feelings
+And look the other way
+Well, it's something I relate to
+Your gift of nonchalance
+But nobody's ever made me fall in love
+With this amount of touch, well
+
+[Pre-Chorus]
+I'm not a fool
+I just love that you're dead inside (That you're dead inside)
+I'm not a fool, I'm just lifeless, too
+But you taught me how to feel
+When nobody ever would
+And you taught me how to love
+When nobody ever could
+
+[Chorus]
+Ooh, girl, I know I should leave you
+And learn to mistreat you
+'Cause you belong to the world
+And ooh, girl, I wanna embrace you
+Domesticate you
+But you belong to the world
+You belong to the world
+
+[Verse 2]
+And I know that I'm saying too much
+Even though I'd rather hold my tongue, yeah
+And I'll pull you closer holding on to
+Every moment 'til my time is done, yeah
+And this ain't right, you've been the only one to make me smile
+In so long, I've succumbed to what I've become, oh, baby
+
+[Pre-Chorus]
+I'm not a fool (I'm not a fool)
+I just love that you're dead inside (That you're dead inside)
+I'm not a fool (Oh, no) I'm just lifeless, too (I'm just lifeless, too)
+But you taught me how to feel (You taught me how to feel)
+When nobody ever would (When nobody ever would)
+And you taught me how to love (You taught me how to love)
+When nobody ever could (Oh, babe, oh, babe)
+
+[Chorus]
+Ooh, girl, I know I should leave you (I know I should leave you)
+And learn to mistreat you (And learn to mistreat you)
+'Cause you belong to the world (Ooh, yeah, ooh, yeah)
+And ooh, girl, I wanna embrace you (Oh, babe, I wanna embrace you)
+Domesticate you (Domesticate you)
+But you belong to the world (Oh, baby)
+
+[Bridge]
+You belong to the world, you belong to the world
+You belong to the loneliness of filling every need
+Oh, no, you belong to the world, you belong to the world
+You belong to the temporary moments of a dream
+
+[Chorus]
+Ooh, girl, I know I should leave you
+And learn to mistreat you
+'Cause you belong to the world, ooh, yeah
+And ooh, girl, I want to embrace you
+Domesticate you
+But you belong to the world
+
+[Outro]
+You belong to the world
+You belong to the world
+You belong to the world
+You belong to the world</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-8">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-7">&larr; Prev</a><a href="#song-9">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">8. Cry for Me</h3>
+      <div class="lyrics">[Intro]
+Ooh, yeah
+Ooh, yeah
+
+[Verse 1]
+I can feel it
+Girl, pick up your phone, I can't believe it
+I can feel my spirit slowly leaving
+I can't see myself and I'm not breathing (Ah)
+I'm not breathing (I'm not breathing)
+Slowly bleeding (Bleeding)
+I wish that I told you all my feelings (Feelings)
+I hope that I live life for a reason (Reason)
+But at least you'll play this song
+When I'm gone
+
+[Chorus]
+And I hope you cry for me like I cry for you
+Every night for you, take it easy on me, baby
+'Cause I tried with you, saw my life with you
+End of time with you, now we're strangers
+And I hope that you still cry for me like I cry for you
+Every night for you, I've been living with this lie
+Now I can't hide the truth, I can't hide the truth
+Girl, I'll cry for you
+Girl, I'll cry for you, ooh, yeah
+
+[Verse 2]
+I can't see clear
+I wash my fears with whisky tears
+I disappear
+Don't interfere, the end is near
+The crowd'll scream
+I block my ears to stop the cheers
+'Cause the stage took a toll
+Been faded on the floor
+In this penthouse prison, I'm alone
+
+[Chorus]
+And I hope you cry for me like I cry for you
+Every night for you, take it easy on me, baby
+'Cause I tried with you, saw my life with you
+End of time with you, now we're strangers
+And I hope that you still cry for me like I cry for you
+Every night for you, I've been living with this lie
+Now I can't hide the truth, I can't hide the truth (Hide the truth)
+Girl, I'll cry for you
+Girl, I'll cry for you, ooh, yeah
+
+[Bridge]
+Every time I hit the road, it takes a little piece of me
+Kills me slowly (Slowly)
+When I needed you the most, you always gave me sympathy
+Now you're over me (Over me)
+Now you're better on your own, it ain't a fucking mystery
+You've been showing me
+Now I've been burning up my home, baby
+I've been burning up my home
+
+[Chorus]
+And I hope you cry for me like I cry for you
+Every night for you, take it easy on me, baby
+'Cause I tried with you, saw my life with you
+End of time with you, now we're strangers
+And I hope that you still cry for me like I cry for you
+Every night for you, I've been living with this lie
+Now I can't hide the truth, I can't hide the truth
+Girl, I'll cry for you
+Girl, I'll cry for you, ooh, yeah</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-9">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-8">&larr; Prev</a><a href="#song-10">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">9. São Paulo</h3>
+      <div class="lyrics">[Part I]
+
+[Intro: Anitta]
+Bota na boca, bota na cara, bota onde quiser
+Bota na boca, bota na cara, bota onde quiser
+
+[Refrain: Anitta]
+O novinho me olhou e quis comer minha pepequinha
+Hoje eu vou dar pro novinho, fode, fode a larissinha
+O novinho me olhou e quis comer minha pepequinha
+Hoje eu vou dar pro novinho, fode, fode a larissinha
+
+[Verse: The Weeknd]
+Every time I try to run, you put your curse all over me
+I surrender at your feet, baby, put it all on me
+Every time I try to pray you away, you got me on my knees
+I surrender at your feet, baby, put it all on me
+
+[Chorus: The Weeknd]
+I love it when you turn me on
+I love it when you turn it on
+I love it when you turn me on
+So come back in and turn it on
+
+[Refrain: Anitta & The Weeknd]
+Bota na boca, bota na cara, bota onde quiser (Turn me on)
+(Turn me on) O novinho me olhou e quis comer minha pepequinha
+(Turn me on) Hoje eu vou dar pro novinho, fode, fode a larissinha
+(Turn me on) O novinho me olhou e quis comer minha pepequinha
+Hoje eu vou dar pro novinho, fode, fode a larissinha (Turn me on)
+
+[Bridge: Anitta]
+Bota na boca, bota na cara
+Bota na boca, bota na cara
+Bota na boca, bota na cara
+Bota na boca, bota na cara
+Bota na boca, bota na cara, bota onde quiser
+
+[Instrumental Outro]
+
+[Part II]
+
+[Verse 1: The Weeknd]
+Baby, ride me 'til the darkness of the night
+Kill me softly like you want me euthanized, oh yeah
+
+[Pre-Chorus: The Weeknd]
+Hot like risin' sun, burnin' everything she touch
+She don't even want your money, can buy you and someone else
+She's addicted to the rush, I can never get enough
+She desensitized to money, need to pay with something else
+
+[Chorus: The Weeknd]
+Baby, you turn me on
+Baby, you turn me on
+Baby, you turn me on
+Girl, you turn me on
+
+[Verse 2: The Weeknd]
+Hit it from the back, she louder than two sold-out nights
+I think she fell in love, she said she trust me with her life, oh
+
+[Pre-Chorus: The Weeknd & Anitta]
+Hot like risin' sun, burnin' everything she touch
+She don't even want your money, can buy you and someone else
+She's addicted to the rush, I could never get enough (Bota na boca, bota na cara, bota na boca, bota na cara)
+She desensitized to money, need to pay with something else</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-10">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-9">&larr; Prev</a><a href="#song-11">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">10. Until We’re Skin &amp; Bones</h3>
+      <div class="lyrics">This song is an instrumental.</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-11">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-10">&larr; Prev</a><a href="#song-12">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">11. Take My Breath</h3>
+      <div class="lyrics">[Intro]
+Yeah, yeah, yeah
+
+[Verse 1]
+I saw the fire in your eyes
+I saw the fire when I look into your eyes
+You tell me things you wanna try (Uh)
+I know temptation is the devil in disguise
+You risk it all to feel alive, oh yeah
+You're offering yourself to me like sacrifice
+You said you do this all the time
+Tell me you love me if I bring you to the light
+
+[Pre-Chorus]
+It's like a dream what she feels with me
+She loves to be on the edge
+Her fantasy is okay with me
+Then suddenly, baby says
+
+[Chorus]
+Take my breath away
+And make it last forever, babe
+Do it now or never, babe (Ah)
+Take my breath away
+Nobody does it better, babe
+Bring me close to—
+
+[Verse 2]
+Want me to hold on to you tight
+You pull me closer, feel the heat between your thighs (Uh, say)
+You're way too young to end your life (Huh)
+Girl, I don't wanna be the one who pays the price
+
+[Pre-Chorus]
+It's like a dream what she feels with me
+She loves to be on the edge
+Her fantasy is okay with me
+Then suddenly, baby says
+
+[Chorus]
+Take my breath away
+And make it last forever, babe
+Do it now or never, babe (Ah)
+Take my breath away
+Nobody does it better, babe
+Bring me close to—
+
+[Verse 2]
+Want me to hold on to you tight
+You pull me closer, feel the heat between your thighs (Uh, say)
+You're way too young to end your life (Huh)
+Girl, I don't wanna be the one who pays the price
+
+[Pre-Chorus]
+Ooh, it's like a dream what she feels with me
+She loves to be on the edge
+Her fantasy is okay with me
+Then suddenly, baby says
+
+[Chorus]
+Take my breath away
+And make it last forever, babe
+Do it now or never, babe (Ah)
+Take my breath away
+Nobody does it better, babe
+Bring me close to heaven, babe (Uh)
+Take my breath
+
+[Bridge]
+Oh, oh-ooh
+And they'll see me
+Oh-ooh, ooh (Yeah, say)
+Oh-oh, oh-oh
+Oh-oh, oh-oh
+Oh-oh, oh-oh
+Oh-oh
+
+[Chorus]
+Take my breath away (Take my breath away)
+And make it last forever, babe
+Do it now or never, babe (Ah)
+Take my breath away (Take my breath away)
+Nobody does it better, babe
+Bring me close to heaven, babe (Take my breath)
+Take my breath (Take my breath a—, breath away)
+(Nobody)
+Take my breath (Take my breath a—, breath away)
+Nobody does it better, babe
+Bring me close to heaven, babe (Uh)
+Take my breath</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-12">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-11">&larr; Prev</a><a href="#song-13">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">12. Sacrifice</h3>
+      <div class="lyrics">[Verse 1]
+I was born in a city
+Where the winter nights don't ever sleep
+So this life's always with me
+The ice inside my veins will never bleed
+
+[Refrain]
+My, ooh
+My, ooh
+
+[Verse 2]
+Uh, every time you try to fix me
+I know you'll never find that missing piece
+When you cry and say you miss me
+I lie and tell you that I'll never leave, but
+
+[Pre-Chorus]
+I sacrificed (Sacrificed)
+Your love for more of the night (Of the night)
+I try to put up a fight (Up a fight)
+Can't tie me down (Down)
+
+[Chorus]
+I don't wanna sacrifice
+For your love, I try
+I don't wanna sacrifice
+But I love my timе
+
+[Refrain]
+My, ooh
+My, ooh
+
+[Verse 3]
+I hold you through the toughest parts
+When you feel likе it's the end
+'Cause life is still worth living
+Yeah, this life is still worth living
+I can break you down and pick you up
+And fuck like we are friends
+But don't be catchin' feelings
+Don't be out here catchin' feelings 'cause
+
+[Pre-Chorus]
+I sacrificed (Sacrificed)
+Your love for more of the night (Of the night)
+I try to put up a fight (Up a fight)
+Can't tie me down (Down, down, down)
+
+[Chorus]
+I don't wanna sacrifice
+For your love, I try
+I don't wanna sacrifice
+But I love my time
+I don't wanna sacrifice
+For your love (Oh), I try
+I don't wanna sacrifice
+But I love my time (My, ooh)
+
+[Bridge]
+Oh, baby
+I hope you know that I, I tried
+Oh, baby (Baby)
+I hope you know I love my time, oh
+
+[Outro]
+I don't wanna sacrifice
+I don't wanna, I try (Hey)
+I don't wanna sacrifice
+But I love my time
+My, ooh
+My, ooh</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-13">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-12">&larr; Prev</a><a href="#song-14">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">13. How Do I Make You Love Me?</h3>
+      <div class="lyrics">[Verse 1]
+We're goin' back in time
+I'd like to see you try
+Unpackin' thoughts through tunnels in your mind
+I'll fix you mushroom tea
+And cross the restless sea
+Release yourself to escape reality
+
+[Pre-Chorus]
+It doesn't faze you
+I need a breakthrough
+I only want what's right in front of me
+It's quite unusual
+Seekin' approval
+Beggin' for it desperately
+I said
+
+[Chorus]
+How do I make you love me?
+How do I make you fall for me?
+How do I make you want me
+And make it last eternally?
+How do I make you love me? (Ooh, ah)
+How do I make you fall for me?
+How do I make you want me (Ooh, ah)
+And make it last eternally?
+
+[Verse 2]
+I can see the real you, girl
+You don't have to hide
+Forget 'bout what your daddy said
+I'll teach you how to shine
+And all the things you tolerated
+Made you cold inside
+But I can light you up again
+Like embers of a fire
+
+[Pre-Chorus]
+It doesn't faze you
+I need a breakthrough
+I only want what's right in front of me
+It's quite unusual
+Seekin' approval
+Beggin' for it desperately
+I said
+
+[Chorus]
+How do I make you love me? (Make you love me)
+How do I make you fall for me? (How do I make you fall?)
+How do I make you want me
+And make it last eternally?
+How do I make you love me? (Ooh, ah)
+How do I make you fall for me?
+How do I make you want me (Ooh, ah)
+And make it last eternally</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-14">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-13">&larr; Prev</a><a href="#song-15">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">14. Tokyo</h3>
+      <div class="lyrics">[Intro: Yoko Takahashi]
+ファリィア セタ メッソ ファリィア トゥスェ
+
+[Verse 1: The Weeknd]
+I felt the beast brewin' up inside me
+Cover my teeth at the sight of violence
+
+[Pre-Chorus: The Weeknd & Yoko Takahashi]
+But, I'm older now (I'm older now)
+Can't hold me down (たしね)
+I hear the voices in my ear, oh, yeah (メル)
+Please come here
+
+Chorus: The Weeknd & Yoko Takahashi]
+I'm on the run
+I feel the chase
+I'm on the run (So fast from here)
+I feel the chase
+I'm on the run (I'm on the run)
+I feel the chase
+I'm on the run (たしね)
+I feel the chase
+
+[Verse 2: The Weeknd]
+I should say, "Where's your heart desired to be?"
+Genetically, my makeup always takes the lead
+But in the end, it's just to face
+My DNA will never change
+
+[Pre-Chorus: The Weeknd & Yoko Takahashi]
+I'm older now (I'm older now)
+Can't hold me down (たしね)
+I hear the voices in my ear, oh, yeah (メル)
+Please come here
+On the edge
+Please don't weep
+
+[Chorus: The Weeknd & Yoko Takahashi]
+I'm on the run
+I feel the chase
+I'm on the run (たしね, I'm on the run)
+I feel the chase
+I'm on the run (I'm on the run)
+I feel the chase
+I'm on the run
+I feel the chase</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-15">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-14">&larr; Prev</a><a href="#song-16">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">15. Can’t Feel My Face</h3>
+      <div class="lyrics">[Verse 1]
+And I know she'll be the death of me
+At least we'll both be numb
+And she'll always get the best of me
+The worst is yet to come
+But at least we'll both be beautiful
+And stay forever young
+This I know, uh
+This I know
+
+[Pre-Chorus]
+She told me, "Don't worry
+About it"
+She told me, "Don't worry
+No more"
+We both know we can't go
+Without it
+She told me, "You'll never
+Be alo-oh-oh-ooh"
+
+[Chorus]
+I can't feel my face when I'm with you
+But I love it
+But I love it, oh
+I can't feel my face when I'm with you
+But I love it
+But I love it, oh
+
+[Verse 2]
+And I know she'll be the death of me
+At least we'll both be numb
+And she'll always get the best of me
+The worst is yet to come
+All the misery was necessary
+When we're deep in love
+This I know (Girl)
+Girl, I know, uh
+
+[Pre-Chorus]
+She told me, "Don't worry
+About it"
+She told me, "Don't worry
+No more"
+We both know we can't go
+Without it
+She told me, "You'll never
+Be alo-oh-oh-ooh"
+
+[Chorus]
+I can't feel my face when I'm with you
+But I love it
+But I love it, oh
+I can't feel my face when I'm with you (I can't feel my face)
+But I love it (But I love it)
+But I love it (I can't feel my face), oh
+I can't feel my face when I'm with you (When I'm with you)
+But I love it (But I love it, yeah)
+But I love it (But I love it), oh
+(I can't feel my face) I can't feel my face when I'm with (When I'm with you) you
+But I love it (But I love it)
+But I love it (Girl, I love it), oh
+
+[Bridge]
+Oh
+Oh-oh
+
+[Pre-Chorus]
+She told me, "Don't worry
+About it"
+She told me, "Don't worry
+No more"
+We both know we can't go (Can't go)
+Without it
+She told me, "You'll never
+Be alo-oh-oh—
+Ooh"
+
+[Chorus]
+I can't feel my face when I'm with you (I can't feel my face, girl)
+But I love it (But I love it, yeah)
+But I love it (Oh, I love it, yeah) oh
+I can't feel my face when I'm with you (Said, I can't feel my face)
+But I love it (But I love it)
+But I love it (Girl, I love it), oh
+(I can't feel my face) I can't feel my face when I'm with
+(When I'm with you) you
+But I love it (Know I love it, girl)
+But I love it (Don't you think I do?), oh
+(I can't feel my face) I can't feel my face when I'm with
+(When I'm with you) you (I can't feel my face, girl)
+But I love it (When I'm with you, baby)
+But I love it (Said, when I'm with you, baby), oh
+I can't feel my fa—
+
+[Outro]
+Uh
+Hey</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-16">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-15">&larr; Prev</a><a href="#song-17">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">16. Lost in the Fire</h3>
+      <div class="lyrics">[Verse 1]
+I wanna fuck you slow with the lights on (Lights on, lights on, lights on)
+You're the only one I've got my sights on (Sights on, sights on, sights on)
+Type of sex you could never put a price on (Price on, price on, price on)
+I'll take it off, you're the one I'll roll the dice on (Dice on, dice on, dice on)
+And I just want a baby with the right one
+(I just want a baby with the right—)
+'Cause I could never be the one to hide one
+(I could never be the one to hide—)
+
+[Pre-Chorus]
+And we lost a lot of things in the fire
+So it took a year for me to find out (Find out, find out)
+
+[Chorus]
+I can't lose you, babe (I can't lose you)
+I can't lose you, babe (I can't lose you, babe)
+I can't lose you, babe (I can't lose you, babe)
+Oh-oh (Oh-oh)
+I can't lose you, babe (I can't lose you)
+I can't lose you, babe (I can't lose you, babe)
+I can't lose you, babe
+Oh-oh (Yeah)
+
+[Verse 2]
+I'm tired of being home alone (Home alone)
+I used to have a girl a day (Girl a day)
+But I want you to stay (I want you to stay, hey)
+You said you might be into girls (Into girls)
+Said you're going through a phase (Through a phase)
+Keeping your heart safe (Keepin' your heart safe, oh)
+Well, baby, you can bring a friend (Bring a friend)
+She can ride on top your face (Top your face)
+While I fuck you straight (While I fuck you straight, yeah)
+
+[Pre-Chorus]
+And we lost a lot of things in the fire (Fire)
+So it took a year for me to find out (Find out, find out)
+
+[Chorus]
+I can't lose you, babe (I can't lose you)
+I can't lose you, babe (I can't lose you, babe)
+I can't lose you, babe (I can't lose you, babe)
+Oh-oh (Oh-oh, oh-oh)
+I can't lose you, babe (I can't lose you)
+I can't lose you, babe (I can't lose you, babe)
+I can't lose you, babe (I can't lose you, babe)
+Oh-oh (Woah)
+
+[Bridge]
+I'm tired of being home alone
+Used to have a girl a day (Girl a day)
+But I want you to stay (I want you to stay, hey)
+
+[Chorus]
+I can't lose you, babe (I can't lose you)
+I can't lose you, babe (I can't lose you, babe)
+I can't lose you, babe (I can't lose you, babe)
+Oh-oh (Oh-oh, oh-oh, oh-oh, oh-oh)
+Ooh, ooh-ooh-ooh (Oh-oh, oh-oh, oh-oh)
+I can't lose you, babe (I can't lose you)
+I can't lose you, babe (I can't lose you, babe)
+I can't lose you, babe (I can't lose you, babe)
+Oh-oh (Oh-oh, oh-oh, oh-oh, oh-oh)
+
+[Outro]
+Ooh</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-17">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-16">&larr; Prev</a><a href="#song-18">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">17. Kiss Land</h3>
+      <div class="lyrics">[Part I]
+
+[Verse 1]
+When I got on stage, she swore I was six feet tall
+But when she put it in her mouth
+She can't seem to reach my–
+Ballin' ain't an issue for me
+I'll make a hundred stacks right back next week
+Do it all again, I'm faded off the wrong thing, the wrong thing
+And I'll admit, baby, I'm a little camera-shy
+But exceptions can be made, baby, ‘cause you're too damn fly
+For what it's worth, I hope you enjoy the show
+'Cause if you're back here only takin' pictures
+You gon' have to take your ass home
+
+[Pre-Chorus]
+'Cause the only thing you're takin' is your clothes off
+Go 'head, girl, strip it down, close your mouth
+I just wanna hear your body talk
+
+[Chorus]
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Oh, girl, don’t hold back, let it out
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Oh, girl, don’t hold back, let it out
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Don’t hold back, let it out
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Don’t hold back
+
+[Verse 2]
+You can meet me in the room where the kisses ain't free
+You gotta pay with your body
+Not really into kisses leading into nothing
+I'm into shows every night, if you play your cards right
+I might fuck around, bring your whole crew on tour
+Fuck around, turn you to my West Coast girl
+Until they book a show in NYC
+Gotta fly back East, where the city don't sleep
+Woah, I'm tryna finish all this potion
+Baby, take your time, I'm tryna sip it 'til the mornin'
+And if you're still up, I'm tryna fuck you in the mornin'
+Said, I'm two days strong
+And never sleep until it's mornin', until the mornin'
+
+Pre-Chorus]
+'Cause the only thing you're takin' is your clothes off
+Go 'head, girl, strip it down, close your mouth
+I just wanna hear your body talk
+
+[Chorus]
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Oh, yeah, don’t hold back, let it out
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Oh, girl, don’t hold back, let it out
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Don’t hold back, let it out
+(Nothing is going to change my love for you, nothing is going to change my love for you)
+Oh, yeah, don’t hold back
+
+[Part II]
+
+[Verse]
+I got a brand new place, I think I've seen it twice all year
+I can't remember how it looks inside
+So you can picture how my life's been
+I went from starin' at the same four walls for 21 years
+To seein' the whole world in just 12 months
+Been gone for so long, I might have just found God
+Well, probably not, if I keep my habits up
+Probably not, if I can't keep up with lovin'
+And I can't stand talkin' to brand new girls
+Only bitches down to fuck when you shower them with ones and
+Probably not if my niggas round them up and
+Probably not, if we take 'em to my spot
+Probably not, if I tweak all day just to sleep at night, goddamn, I'm high
+My doctor told me to stop
+And he gave me somethin' to pop
+And I mix it up with some Adderall's
+And I wait to get to the top
+And I mix it up with some alcohol and I pour it up in a shot
+I don't care about you, why you worried 'bout me?
+All I want is that smoke, give me all of that smoke
+Last week was my rough week
+I'm still drippin' down from my nose
+And I don't know how to drive, I make my driver get high
+But if he goes under that 110, believe my driver get fired
+And I don't got any friends, I got XO in my bloodwork
+And I'm posted up down in Florida 
+Ft. Lauderdale to that MIA
+Sip cold drinks with Grand Marnier
+To the break of dawn, Kahlua milk
+White Russian when the sun hits
+White Russians with tongue tricks
+I like the feeling of tongue rings
+She like the way my whole tongue flip
+She grind hard for tuition
+She grind hard 'til her teeth chip
+I make her hide it with gold grills
+I make her suck it with gold grills
+In the back room of the VIP, she don't ever sleep
+
+[Outro]
+This ain't nothing to relate to
+And this ain't nothing to relate to
+And this ain't nothing to relate to
+This ain't nothing to relate to
+Even if you tried, you tried, you tried
+You tried, you tried, you tried
+You tried, you tried, you tried
+You tried, you tried, you tried
+This ain't nothing to relate to
+This ain't nothing to relate to
+And this ain't nothing to relate to
+This ain't nothing to relate to
+Even if you tried, you tried, you tried
+You tried, you tried, you tried
+You tried, you tried, you tried
+You tried, you tried, you tried</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-18">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-17">&larr; Prev</a><a href="#song-19">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">18. Often</h3>
+      <div class="lyrics">[Intro: Nükhet Duru & The Weeknd]
+Seneler sürer her günüm
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah
+Yalnız gitmekten yorgunum
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah
+Seneler sürer her günüm
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah
+Yalnız gitmekten yorgunum
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah
+
+[Verse 1: The Weeknd]
+I usually love sleeping all alone
+This time around, bring your friend with you
+But we ain't really gonna sleep at all
+You ain't gon' catch me with them sneak pictures, sneak pictures
+In my city, I'm a young god
+That pussy kill be so vicious
+My god white, he in my pocket
+He get me redder than the devil 'til I go nauseous (Oh)
+
+[Chorus: The Weeknd]
+She asked me if I do this every day, I said, "Often"
+Asked how many times she rode the wave, "Not so often" (Baby)
+Bitches down to do it either way, often
+Baby, I can make that pussy rain, often
+Often, often, girl, I do this often
+Make that pussy poppin', do it how I want it
+Often, often, girl, I do this often
+Make that pussy poppin', do it how I want it
+Often
+
+[Verse 2: The Weeknd]
+Infatuated by the fame status
+She wanna ride inside the G-Class grey 'matic (Oh)
+I come around, she leave that nigga like he ain't matter
+That girl been drinkin' all day, need to change bladder
+She's just happy that the crew's back in town
+She 'bout to go downtown for a whole hour
+If I had her, you can have her, man it don't matter
+I'm never sour, I'm just smokin' somethin' much louder
+
+[Chorus: The Weeknd]
+She asked me if I do this every day, I said, "Often"
+Asked how many times she rode the wave, "Not so often"
+Bitches down to do it either way, often
+Baby, I can make that pussy rain, often
+(Baby, I can make that pussy rain)
+Often, often, girl, I do this often
+Make that pussy poppin', do it how I want it
+Often, often, girl, I do this often
+Make that pussy poppin', do it how I want it
+Often
+
+[Bridge: The Weeknd]
+Ooh, the sun's risin' up
+The night's almost up
+The night's almost done
+But I see your eyes
+You wanna go again
+Girl, I'll go again
+Girl, I'll go again
+
+[Chorus: The Weeknd]
+She asked me if I do this every day, I said, "Often"
+Asked how many times she rode the wave, "Not so often"
+Bitches down to do it either way, often
+(Bitches down to do it either way)
+Baby, I can make that pussy rain, often (Oh, oh-oh-oh)
+Often, often, girl, I do this often
+Make that pussy poppin', do it how I want it
+Often, often, girl, I do this often
+Make that pussy poppin', do it how I want it
+Often
+
+Outro: Nükhet Duru & The Weeknd]
+Seneler sürer her günüm
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah
+Yalnız gitmekten yorgunum
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah
+Seneler sürer her günüm
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah
+Yalnız gitmekten yorgunum
+Ooh, yeah, ooh, yeah, ooh, yeah, ooh, yeah</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-19">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-18">&larr; Prev</a><a href="#song-20">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">19. Given Up on Me</h3>
+      <div class="lyrics">[Part I]
+
+[Intro]
+Love me, love me, love me, say you do
+Let me fly away with you
+Satisfy this hungriness
+Ayy, ayy, baby
+
+[Verse]
+I've been lying to your faces, yeah
+I've been always wasted, it's too late to save me
+Save me (Save me), save me (Save me), save me (Save me)
+Oh, save me (Woah)
+Fill another cup of forsaken (Baby)
+Yeah, 'til my stomach achin', bloated in my face, and
+Face it (Face it), face it (Face it), face it (Face, yeah)
+Just let me go
+
+[Pre-Chorus]
+I'll always lie to you (To you)
+I'm unreliable (For you, babe)
+Tell me you care for me
+Just give me what I need, eh
+
+[Chorus]
+Why won't you let me go?
+Why won't you let me leave?
+I've given up on me, yeah
+I think I'm in too deep
+Why won't you let me go? Oh-oh
+Why won't you let me leave? (Yeah)
+I've given up on me, yeah
+I think I'm in too deep
+
+[Post-Chorus]
+Oh-oh, oh-oh, oh-oh-oh-oh
+I need you to let go, let go, let go, oh-oh-oh
+
+[Bridge: The Weeknd & Future]
+Why won't you let me sleep?
+Why won't you let me go?
+Why won't you let me try?
+Why won't you let me die?
+
+[Pre-Chorus]
+I'll always lie to you (To you)
+I'm unreliable (For you, babe)
+Tell me you care for me
+Just give me what I need, eh
+
+[Chorus]
+Why won't you let me go?
+Why won't you let me leave?
+I've given up on me, yeah
+I think I'm in too deep
+Why won't you let me go? Oh-oh
+Why won't you let me leave? (Yeah)
+I've given up on me, yeah
+I think I'm in too deep
+
+[Post-Chorus]
+Oh-oh, oh-oh, oh-oh-oh-oh
+I need you to let go, let go, let go, oh-oh-oh
+
+[Bridge: The Weeknd & Future]
+Why won't you let me sleep?
+Why won't you let me go?
+Why won't you let me try?
+Why won't you let me die?
+
+[Part II]
+
+[Interlude]
+I could never leave you alone
+I could never leave you alone
+I could never leave you alone
+Leave you alone—
+Leave you alone—
+Leave you alone—
+Leave you—
+
+[Verse]
+It keeps calling me back, the sunshine
+I can feel the warmth on my skin for the first time
+When I'm far away from you, babe, I'm on fire
+My sunshine, my sunshine
+I know it's not good for me, I know it's not good for me
+I know it's not fair to me, I know
+You're no good for me, baby, my sunshine
+It's not good for me, no, the sunshine
+
+[Outro]
+Ooh, Lord
+I want your company (Eh)
+Ooh, oh, Lord, oh, Lord
+Don't you give up on me
+Mercy-cy me
+Oh, Lord, my company
+Mercy me
+Oh-oh, listen</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-20">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-19">&larr; Prev</a><a href="#song-21">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">20. I Was Never There</h3>
+      <div class="lyrics">[Verse]
+What makes a grown man wanna cry?
+(Cry, cry, cry, cry)
+What makes him wanna take his life? (Ah, ah)
+(Yeah)
+His happiness is never real
+(Real, real, real, real)
+And mindless sex is how he feels, ooh, he heals
+
+[Chorus]
+When it's time, when it's time, when it's time
+It won't matter (It don't matter), it won't matter (Matter)
+When it's time, when it's time, when it's time (Time, it's time, babe)
+It won't matter (It won't matter, babe), it won't matter (Oh)
+It was like he was never there
+(It was like he was never there)
+It was like he was gone in thin air (Oh)
+When it's time, when it's time, when it's time (Oh, baby)
+It won't matter (It won't matter, baby), it won't matter
+
+[Post-Chorus]
+When it's time, when it's time, when it's time
+It won't matter, it won't matter
+When it's time, when it's time, when it's time
+It won't matter, it won't matter
+It was like he was never there
+It was like he was gone in thin air
+When it's time, when it's time, when it's time
+It won't matter, it won't matter
+
+[Interlude]
+When it's time, when it's time, when it's time
+It won't matter, it won't matter
+When it's time, when it's time, when it's time
+It won't matter, it won't matter
+
+[Bridge]
+Ooh, now I know what love is
+And I know it ain't you for sure
+You'd rather something toxic
+So I poison myself again, again, 'til I feel nothing
+In my soul (In my soul)
+I'm on the edge of something breaking
+I feel my mind is slowly fadin'
+If I keep going, I won't make it
+If I keep going, I won't make it
+
+[Outro]
+And it's all because of you
+It's all because of you, it's all because of you
+It's all because of you, woah-woah
+Don't you, baby, hey
+It won't matter, baby
+Don't you know? Don't you know? Oh-ooh, oh
+Hey</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-21">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-20">&larr; Prev</a><a href="#song-22">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">21. Given Up on Me (Reprise)</h3>
+      <div class="lyrics">[Part I]
+
+[Intro]
+Love me, love me, love me, say you do
+Let me fly away with you
+Satisfy this hungriness
+Ayy, ayy, baby
+
+[Verse]
+I've been lying to your faces, yeah
+I've been always wasted, it's too late to save me
+Save me (Save me), save me (Save me), save me (Save me)
+Oh, save me (Woah)
+Fill another cup of forsaken (Baby)
+Yeah, 'til my stomach achin', bloated in my face, and
+Face it (Face it), face it (Face it), face it (Face, yeah)
+Just let me go
+
+[Pre-Chorus]
+I'll always lie to you (To you)
+I'm unreliable (For you, babe)
+Tell me you care for me
+Just give me what I need, eh
+
+[Chorus]
+Why won't you let me go?
+Why won't you let me leave?
+I've given up on me, yeah
+I think I'm in too deep
+Why won't you let me go? Oh-oh
+Why won't you let me leave? (Yeah)
+I've given up on me, yeah
+I think I'm in too deep
+
+[Post-Chorus]
+Oh-oh, oh-oh, oh-oh-oh-oh
+I need you to let go, let go, let go, oh-oh-oh
+
+[Bridge: The Weeknd & Future]
+Why won't you let me sleep?
+Why won't you let me go?
+Why won't you let me try?
+Why won't you let me die?
+
+[Part II]
+
+[Interlude]
+I could never leave you alone
+I could never leave you alone
+I could never leave you alone
+Leave you alone—
+Leave you alone—
+Leave you alone—
+Leave you—
+
+[Verse]
+It keeps calling me back, the sunshine
+I can feel the warmth on my skin for the first time
+When I'm far away from you, babe, I'm on fire
+My sunshine, my sunshine
+I know it's not good for me, I know it's not good for me
+I know it's not fair to me, I know
+You're no good for me, baby, my sunshine
+It's not good for me, no, the sunshine
+
+[Outro]
+Ooh, Lord
+I want your company (Eh)
+Ooh, oh, Lord, oh, Lord
+Don't you give up on me
+Mercy-cy me
+Oh, Lord, my company
+Mercy me
+Oh-oh, listen</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-22">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-21">&larr; Prev</a><a href="#song-23">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">22. The Hills</h3>
+      <div class="lyrics">[Intro]
+Yeah
+Yeah
+Yeah
+
+[Verse 1]
+Your man on the road, he doin' promo
+You said, "Keep our business on the low-low"
+I'm just tryna get you out the friend zone
+'Cause you look even better than the photos
+I can't find your house, send me the info
+Drivin' through the gated residential
+Found out I was comin', sent your friends home
+Keep on tryna hide it, but your friends know
+
+[Chorus]
+I only call you when it's half-past five
+The only time that I'll be by your side
+I only love it when you touch me, not feel me
+When I'm fucked up, that's the real me
+When I'm fucked up, that's the real me, yeah
+I only call you when it's half-past five
+The only time I'd ever call you mine
+I only love it when you touch me, not feel me
+When I'm fucked up, that's the real me
+When I'm fucked up, that's the real me, babe
+
+[Verse 2]
+I'ma let you know and keep it simple
+Tryna keep it up don't seem so simple
+I just fucked two bitches 'fore I saw you
+And you gon' have to do it at my tempo
+Always tryna send me off to rehab
+Drugs started feelin' like it's decaf
+I'm just tryna live life for the moment
+And all these motherfuckers want a relapse
+
+[Chorus]
+I only call you when it's half-past five
+The only time that I'll be by your side
+I only love it when you touch me, not feel me
+When I'm fucked up, that's the real me
+When I'm fucked up, that's the real me, yeah
+I only call you when it's half-past five
+The only time I'd ever call you mine
+I only love it when you touch me, not feel me
+When I'm fucked up, that's the real me
+When I'm fucked up, that's the real me, babe
+
+[Bridge]
+Hills have eyes, the hills have eyes
+Who are you to judge? Who are you to judge?
+Hide your lies (Hide your lies), girl, hide your lies (Hide your lies, oh, baby)
+Only you to trust (Only you, only you), only you (Only you)
+
+[Chorus]
+I only call you when it's half-past five
+The only time that I'll be by your side
+I only love it when you touch me, not feel me
+When I'm fucked up, that's the real me
+When I'm fucked up, that's the real me, yeah
+I only call you when it's half-past five
+The only time I'd ever call you mine
+I only love it when you touch me, not feel me
+When I'm fucked up, that's the real me
+When I'm fucked up, that's the real me, babe
+
+[Outro]
+Ewedihalehu
+Yene konjo, ewedihalehu
+Yene fikir, fikir, fikir, fikir
+Yene fikir, fikir, fikir, fikir
+Ewedihalehu
+Yene konjo, ewedihalehu...
+</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-23">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-22">&larr; Prev</a><a href="#song-24">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">23. Timeless</h3>
+      <div class="lyrics">[Intro: The Weeknd]
+Sun is shining, it's over
+It's tomorrow
+Bathe yourself in the light, in your love
+XO
+Ooh, yeah, ooh, yeah, no
+
+[Verse 1: Playboi Carti & The Weeknd]
+Ever since I was a jit, knew I was the shit (Ooh, yeah)
+Shawty keep wanna come 'round, she wanna get hit (Wanna get hit so hard)
+She think she the main because I keep her by my side
+Double-O, bust down the watch, she know that I'm timeless (Timeless)
+I put my son in some Rick
+I pull that gun off the hip
+Pockets hold twenty-two clips (Ah)
+I break her heart, Comme Garçon
+Put on a shirt, get put on a blimp
+Bitch like a stain, get ready to lick
+I had to tеll her that ever sincе I was a jit, knew I was the shit (Oh)
+She singin' my songs, she wanna die lit, tryna get hit
+House like a bank, deposit this bitch, 'posit that check
+Smile on my face, ain't fearing shit, come and get checked (Uh)
+Ice on my neck, double-O wrist
+She in the Scat, hell of a 'Cat
+Fresh out the trench, four hundred packs
+Uh, yeah, I'm spinnin' in Paris (Uh)
+Dress for these hoes, they finna flock
+Just poured a four in a soda, it pop
+Them drugs finna hit, I'm feelin' ill
+I'm wrestlin' all of my demons, I feel like The Rock
+
+[Chorus: The Weeknd & Playboi Carti]
+(Shit, uh, yeah)
+Ever since I was a kid, I been legit (Jit, ooh, nah)
+If I was you, I would cut up my wrist (Dumb bit')
+XO tatted all over her body, yeah (Yeah)
+She just wanna roll and I don't mind it, yeah
+Ever since I was a jit, I been legit (Ooh, nah, uh)
+You should let her go, she wanna be it (Oh, yeah)
+Double-O tatted on her body, yeah
+It don't matter what they say, I'm timeless, yeah (Schyeah)
+
+[Verse 2: The Weeknd & Playboi Carti]
+Oh, city on fire when I'm comin' home
+Fill up the sky (Yeah), I fill up the Dome
+They'll play it one day (Yeah), it's a hell of a show
+But it's gonna hurt 'cause we did it first
+Feel like Skateboard P, BBC boys on the creep
+Feel like it's '03, Neptune drum with a beam (Yeah)
+She hippie-flippin' a bean, she wanna fuck with the team
+She fell in love with the cream (Yeah), she fell in love with the scene
+Ooh, yeah, her man quiet, not a peep (Oh, nah)
+Broke his heart, PTSD (Oh, nah)
+Hold his chest, let it breathe
+Let it breathe, niggas scheme
+And I got a priest, he got a cross
+Get out of line, send him to God
+I shed a tear, pray for a loss, ooh, yeah (Yeah)
+
+[Chorus: The Weeknd & Playboi Carti]
+Ever since I was a kid, I been legit (Homixide, Homixide, Homixide, oh, oh)
+If I was you, I would cut up my wrist (Ah)
+XO tatted all over her body, yeah (Body, yeah)
+She just wanna roll and I don't mind it, yeah
+Ever since I was a jit, I been legit (Yeah, ooh, nah)
+You should let her go, she wanna be it (Oh, nah)
+Double-O tatted on her body, yeah (Body, yeah)
+It don't matter what they say, I'm timeless
+
+[Outro: The Weeknd & Playboi Carti]
+Timeless (Oh), timeless, timeless
+Timeless, timeless, timeless, we timeless, oh
+Timeless, timeless, timeless (Yeah), timeless
+Timeless (Yeah), timeless, timeless, we timeless, oh
+Oh (Blatt)
+Oh (Yuh, lit)</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-24">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-23">&larr; Prev</a><a href="#song-25">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">24. Creepin’</h3>
+      <div class="lyrics">[Intro]
+(Just can't believe this, man)
+(Metro Boomin want some more, nigga)
+
+[Verse 1: The Weeknd]
+Somebody said they saw you
+The person you were kissing wasn't me
+And I would never ask you
+I just kept it to myself
+
+[Chorus: The Weeknd]
+I don't wanna know
+If you're playin' me, keep it on the low
+'Cause my heart can't take it anymore
+And if you creepin', please don't let it show
+Oh, baby, I don't wanna know
+
+[Verse 2: The Weeknd]
+I think about it when I hold you
+When lookin' in your eyes, I can't believe
+And I don't need to know the truth
+Baby, keep it to yourself
+
+[Chorus: The Weeknd]
+I don't wanna know
+If you're playin' me, keep it on the low
+'Cause my heart can't take it anymore
+And if you creepin', please don't let it show
+Oh, baby, I don't wanna know
+
+[Bridge: Mario Winans, The Weeknd, Both]
+Did he touch you better than me? (Touch you better than me)
+Did he watch you fall asleep? (Watch you fall asleep)
+Did you show him all those things that you used to do to me?
+If you're better off that way (Better off that way)
+There ain't more that I can say (More that I can say)
+Just go on and do your thing and don't come back to me
+
+[Verse 3: 21 Savage]
+Woah, woah, woah, 21
+Had me crushin', I was cuffin' like the precinct
+How you go from housewife to a sneaky link?
+Got you riding 'round in all type of Benzes and Rovers
+Girl, you used to ride in the rinky-dink
+I'm the one put you in Eliantte (On God)
+Fashion Nova model, I put you on the runway (On God)
+You was rockin' Coach bags, got you Chane'-ne'
+Side bitch in Frisco, I call her my Bay-bae (21)
+I got a girl, but I still feel alone (On God)
+If you playin' me that mean my home ain't home (On God)
+Havin' nightmares of goin' through your phone (21)
+Can't even record, you got me out my zone
+
+Chorus: The Weeknd]
+I don't wanna know
+If you're playin' me, keep it on the low
+'Cause my heart can't take it anymore
+And if you creepin', please don't let it show
+Oh, baby, I don't wanna know
+If you're playin' me, keep it on the low
+'Cause my heart can't take it anymore
+And if you creepin', please don't let it show
+Oh, baby, I don't wanna know
+
+[Outro: 21 Savage & The Weeknd]
+If you creepin', just don't let me find out (On God)
+Get a hotel, never bring 'em to the house (On God)
+If you're better off that way
+Baby, all that I can say
+If you're gonna do your thing, then don't come back to me</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-25">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-24">&larr; Prev</a><a href="#song-26">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">25. Popular</h3>
+      <div class="lyrics">[Intro: Madonna & The Weeknd]
+I've seen the devil
+Down Sunset
+In every place
+In every face
+Yeah (Uh, uh)
+Yeah (Uh, uh)
+
+[Verse 1: The Weeknd]
+Tell me, do you see her? (Yeah; uh) She's livin' her life (Uh)
+Even if she acts like she don't want the limelight (Uh, yeah; uh, uh)
+But if you knew her (Yeah-yeah; uh), she lives a lie
+She calls the paparazzi, then she acts surprised
+Oh
+
+[Pre-Chorus: The Weeknd]
+Oh, I know what she needs (Oh-oh; uh)
+She just want the fame, I know what shе fiends (Oh-oh; uh, yeah)
+Give hеr a little taste, runnin' back to me (Oh-oh; uh)
+Put it in her veins, pray her soul to keep, ooh
+Ooh, every night (Every night; uh), she prays to the sky
+Flashin' lights is all she ever wants to see
+
+[Chorus: The Weeknd]
+Beggin' on her knees to be popular
+That's her dream, to be popular (Ha)
+Kill anyone to be popular (Hm)
+Sell her soul to be popular (Popular)
+Just to be popular (Uh-huh)
+Everybody scream 'cause she popular (Ha)
+She mainstream 'cause she popular
+Never be free 'cause she popular
+
+[Post-Chorus: Playboi Carti & The Weeknd]
+Money on top of me, money on top of her (Uh-huh)
+Money on top of me, money on top of her (Uh-huh)
+Yeah, shawty fuck with me 'cause she know I'm popular (Uh-huh)
+Yeah, shawty fuck with me 'cause she know I'm popular
+
+[Verse 2: Madonna & The Weeknd]
+I know that you see me (Huh), time's gone by (Uh, uh)
+Spent my whole life runnin' from your flashin' lights
+Try to own it (Uh), but I'm alright (Uh, yeah)
+You can't take my soul without a fuckin' fight (Uh)
+Oh
+
+Pre-Chorus: The Weeknd, The Weeknd & Madonna]
+Oh, I know what she needs (Oh-oh; uh, yeah)
+She just want the fame, I know what she fiends (Oh-oh; uh, yeah)
+Give her a little taste, runnin' back to me (Oh-oh; uh, yeah)
+Put it in her veins, pray her soul to keep, ooh (Uh)
+Ooh, every night (Every night), she prays to the sky (Ha)
+Flashin' lights is all she ever wants to see
+
+[Chorus: The Weeknd & Madonna, The Weeknd]
+Beggin' on her knees to be popular (Huh)
+That's her dream, to be popular (Hey)
+Kill anyone to be popular (Hm)
+Sell her soul to be popular (Popular)
+Just to be popular (Uh-huh)
+Everybody scream 'cause she popular (Ha)
+She mainstream 'cause she popular
+Never be free 'cause she popular
+
+[Post-Chorus: Playboi Carti & The Weeknd]
+Money on top of me, money on top of her (Uh-huh)
+Money on top of me, money on top of her (Uh-huh)
+Yeah, shawty fuck with me 'cause she know I'm popular (Uh)
+Yeah, shawty fuck with me 'cause she know I'm popular (Uh)
+Money on top of me, money on top of her (Uh-huh)
+Money on top of me, money on top of her (Uh-huh)
+Yeah, shawty fuck with me 'cause she know I'm popular (Uh-huh)
+Yeah, shawty fuck with me 'cause she know I'm popular
+
+[Bridge: Playboi Carti, The Weeknd & Madonna]
+I'm gettin' money and I'm keepin' it
+I'm gettin' cash and I'm keepin' it
+Money on top of me, money on top of her
+Yeah, shawty fuck with me 'cause she know I'm popular
+Pop-popular, born to be popular
+She in debt, twenty mill', but she run it up
+She can never be broke 'cause she popular
+Turn the webcam on for the followers (Hahahahaha)
+
+[Chorus: The Weeknd & Madonna, The Weeknd]
+Beggin' on her knees to be popular
+That's her dream, to be popular (Ha)
+Kill anyone to be popular (Hm)
+Sell her soul to be popular (Popular)
+Just to be popular (Uh-huh)
+Everybody scream 'cause she popular (Ha)
+She mainstream 'cause she popular
+Never be free 'cause she popular</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-26">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-25">&larr; Prev</a><a href="#song-27">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">26. One of the Girls</h3>
+      <div class="lyrics">[Intro: JENNIE]
+Lock me up and throw away the key
+He knows how to get the best out of me
+I'm no force for the world to see
+Trade my whole life just to be
+
+[Verse 1: The Weeknd]
+Tell nobody I control you
+I broke you just to own you
+They can't tell but I love you
+'Cause you're loyal, baby
+I love when you're submissive
+You love it when I break skin
+You feel pain without flinchin'
+So say it
+
+[Pre-Chorus: Lily-Rose Depp]
+Give me tough love
+Leave me with nothin' when I come down
+My kind of love
+Force me and choke me 'til I pass out
+
+[Chorus: Lily-Rose Depp]
+We don't gotta bе in love, no
+I don't gotta be the onе, no
+I just wanna be one of your girls tonight
+We don't gotta be in love, no
+I don't gotta be the one, no
+I just wanna be one of your girls tonight, oh
+
+[Verse 2: Lily-Rose Depp]
+Push me down, hold me down
+Spit in my mouth while you turn me out
+I wanna take your light inside
+Tear me down, snuff me out
+Hands on my neck while you push it up
+And I'm screamin' now
+
+[Pre-Chorus: The Weeknd]
+Give me tough love
+Leave me with nothin' when I come down
+My kind of love
+Force me and choke me 'til I pass out
+
+[Chorus: The Weeknd & Lily-Rose Depp, The Weeknd, Lily-Rose Depp]
+We don't gotta be in love, no
+I don't gotta be the one, no
+I just wanna be one of your girls tonight (Tonight)
+We don't gotta be in love, no
+I don't gotta be the one, no (Oh)
+I just wanna be one of your girls tonight, oh
+
+[Bridge: JENNIE]
+Lock me up and throw away the key
+He knows how to get the best out of me
+I'm no force for the world to see
+Trade my whole life just to be
+Top of the world, but I'm still not free
+This is a secret that I keep
+Until it's gone, I can never find peace
+Waste my whole life just to be
+
+[Chorus: All, The Weeknd, Lily-Rose Depp & JENNIE]
+We don't gotta be in love, no
+I don't gotta be the one, no
+I just wanna be one of your girls tonight (Tonight)
+We don't gotta be in love, no
+I don't gotta be the one, no (Oh)
+I just wanna be one of your girls tonight (Oh), oh</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-27">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-26">&larr; Prev</a><a href="#song-28">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">27. Zankoku na Tenshi no Thesis</h3>
+      <div class="lyrics">[Intro]
+Zankoku na tenshi no you ni
+Shounen yo shinwa ni nare
+
+[Verse 1]
+Aoi kaze ga ima
+Mune no doa wo tataite mo
+Watashi dake wo tada mitsumete
+Hohoenderu anata
+
+[Verse 2]
+Sotto fureru mono
+Motomeru koto ni muchuu de
+Unmei sae mada shiranai
+Itaike na hitomi
+
+[Pre-Chorus]
+Dakedo itsuka kidzuku deshou
+Sono senaka ni wa
+Haruka mirai mezasu tame no
+Hane ga aru koto
+
+[Chorus]
+Zankoku na tenshi no teeze
+Madobe kara yagate tobitatsu
+Hotobashiru atsui patosu de
+Omoide wo uragiru nara
+Kono sora wo daite kagayaku
+Shounen yo shinwa ni nare
+
+[Instrumental Break]
+
+[Verse 3]
+Zutto nemutteru
+Watashi no ai no yurikago
+Anata dake ga yume no shisha ni
+Yobareru asa ga kuru
+
+[Verse 4]
+Hosoi kubisuji wo
+Tsukiakari ga utsushiteru
+Sekaijuu no toki wo tomete
+Tojikometai kedo
+
+[Pre-Chorus]
+Moshimo futari aeta koto ni
+Imi ga aru nara
+Watashi wa sou jiyuu wo shiru
+Tame no baiburu
+
+[Chorus]
+Zankoku na tenshi no teeze
+Kanashimi ga soshite hajimaru
+Dakishimeta inochi no katachi
+Sono yume ni mezameta toki
+Dare yori mo hikari wo hanatsu
+Shounen yo shinwa ni nare
+
+[Pre-Chorus]
+Hito wa ai wo tsumugi nagara
+Rekishi wo tsukuru
+Megami nante narenai mama
+Watashi wa ikiru
+
+[Chorus]
+Zankoku na tenshi no teeze
+Madobe kara yagate tobitatsu
+Hotobashiru atsui patosu de
+Omoide wo uragiru nara
+Kono sora wo daite kagayaku
+Shounen yo shinwa ni nare</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-28">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-27">&larr; Prev</a><a href="#song-29">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">28. Out of Time</h3>
+      <div class="lyrics">[Intro]
+Yeah, yeah
+
+[Verse 1]
+The last few months, I've been workin' on me, baby
+There's so much trauma in my life
+I've been so cold to the ones who loved me, baby
+I look back now and I realize
+
+[Pre-Chorus]
+And I remember when I held you
+You begged me with your drowning eyes to stay
+And I regret I didn't tell you
+Now I can't keep you from loving him
+You made up your mind
+
+[Chorus]
+Say I love you, girl, but I'm out of time
+Say I'm there for you, but I'm out of time
+Say that I'll care for you, but I'm out of time
+Said I'm too late to make you mine, out of time (Ah)
+
+[Verse 2]
+If he mess up just a little
+Baby, you know my line
+If you don't trust him a little
+Then come right back, girl, come right back
+Give me one chance, just a little
+Baby, I'll treat you right
+And I'll love you like I shoulda loved you all the time
+
+[Pre-Chorus]
+And I remember when I held you (Held you, baby)
+You begged me with your drowning eyes to stay (Never again, baby)
+And I regret I didn't tell you (Hey)
+Now I can't keep you from loving him
+You made up your mind (Uh)
+
+[Chorus]
+Say I love you, girl, but I'm out of time
+Say I'm there for you, but I'm out of time (No)
+Say that I'll care for you, but I'm out of time (Hey)
+Said I'm too late to make you mine, out of time (Ah)
+
+[Outro: The Weeknd & Tomoko Aran]
+Ooh, singin', out of time
+Said I had you to myself, but I'm out of time
+Say that I'll care for you, but I'm out of time
+But I'm too late to make you mine, out of time (Uh)
+Out of time (Pretend—)
+Out of time (Pretend—)
+
+[Spoken Outro: Jim Carrey]
+Don't you dare touch that dial
+Because like the song says, you are out of time
+You're almost there, but don't panic
+There's still more music to come
+Before you're completely engulfed in the blissful embrace of that little light you see in the distance
+Soon you'll be healed, forgiven, and refreshed
+Free from all trauma, pain, guilt, and shame
+You may even forget your own name
+But before you dwell in that house forever
+Here's thirty minutes of easy listening to some slow tracks
+On 103.5 Dawn FM</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-29">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-28">&larr; Prev</a><a href="#song-30">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">29. I Feel It Coming</h3>
+      <div class="lyrics">[Intro: The Weeknd]
+Yeah, ah
+
+[Verse 1: The Weeknd]
+Tell me what you really like
+Baby, I can take my time
+We don't ever have to fight
+Just take it step-by-step
+I can see it in your eyes
+'Cause they never tell me lies
+I can feel that body shake
+And the heat between your legs.
+
+Pre-Chorus: The Weeknd]
+You've been scared of love and what it did to you
+You don't have to run, I know what you've been through
+Just a simple touch and it could set you free
+We don't have to rush when you're alone with me
+
+[Chorus: The Weeknd]
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+
+[Verse 2: The Weeknd]
+You are not the single type
+So, baby, this the perfect time
+I'm just tryna get you high (I'm just tryin', babe)
+And faded off this touch
+You don't need a lonely night
+So, baby, I can make it right
+You just gotta let me try (Try)
+To give you what you want
+
+[Pre-Chorus: The Weeknd]
+You've been scared of love and what it did to you
+You don't have to run, I know what you've been through
+Just a simple touch and it could set you free
+We don't have to rush when you're alone with me
+
+[Chorus: The Weeknd & Daft Punk]
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+I feel it comin', I feel it comin', babe
+
+[Pre-Chorus: The Weeknd]
+Uh, you've been scared of love and what it did to you
+You don't have to run, I know what you've been through
+Just a simple touch and it could set you free
+We don't have to rush when you're alone with me
+
+[Chorus: The Weeknd & Daft Punk]
+I feel it comin' (I feel it comin')
+I feel it comin', babe (I feel it comin', babe)
+I feel it comin' (I feel it comin')
+I feel it comin', babe (I know what you feel right now)
+I feel it comin' (I feel it comin')
+I feel it comin', babe (I feel it comin', baby)
+I feel it comin' (I feel it comin')
+I feel it comin', babe (I know what you say right now, babe)
+I feel it comin' (Na-na-na, na-na-na, na-na-na; I feel it comin')
+I feel it comin', babe (I feel it comin', babe; oh, babe)
+I feel it comin' (I feel it comin')
+I feel it comin', babe (I know what you say right now)
+I feel it comin' (Na-na-na, na-na-na, na-na-na; I feel it comin')
+I feel it comin', babe (I feel it comin', baby)
+I feel it comin' (I feel it comin')
+I feel it comin', babe
+
+[Outro: Daft Punk]
+I feel it comin', babe
+I feel it comin', babe
+I feel it comin', babe
+I feel it comin', babe</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-30">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-29">&larr; Prev</a><a href="#song-31">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">30. Die for You</h3>
+      <div class="lyrics">[Verse 1]
+I'm findin' ways to articulate the feelin' I'm goin' through
+I just can't say I don't love you (Yeah)
+'Cause I love you, yeah
+It's hard for me to communicate the thoughts that I hold
+But tonight, I'm gon' let you know
+Let me tell the truth
+Baby, let me tell the truth, yeah
+
+[Pre-Chorus]
+You know what I'm thinkin', see it in your eyes
+You hate that you want me, hate it when you cry
+You're scared to be lonely, 'specially in the night
+I'm scared that I'll miss you, happens every time
+I don't want this feelin', I can't afford love
+I try to find a reason to pull us apart
+It ain't workin' 'cause you're perfect
+And I know that you're worth it
+I can't walk away, oh
+
+[Chorus]
+Even though we're goin' through it
+And it makes you feel alone
+Just know that I would die for you
+Baby, I would die for you, yeah
+The distance and the time between us
+It'll never change my mind 'cause
+Baby, I would die for you
+Baby, I would die for you, yeah (Say)
+
+[Verse 2]
+I'm findin' ways to manipulate the feelin' you're goin' through
+But, baby girl, I'm not blamin' you
+Just don't blame me, too, yeah
+'Cause I can't take this pain forever
+And you won't find no one that's better
+'Cause I'm right for you, babe
+I think I'm right for you, babe
+
+[Pre-Chorus]
+You know what I'm thinkin', see it in your eyes
+You hate that you want me, hate it when you cry
+It ain't workin' 'cause you're perfect
+And I know that you're worth it
+I can't walk away, oh
+
+[Chorus]
+Even though we're goin' through it
+And it makes you feel alone
+Just know that I would die for you
+Baby, I would die for you, yeah
+The distance and the time between us
+It'll never change my mind 'cause
+Baby, I would die for you, uh
+Baby, I would die for you, yeah
+
+[Bridge]
+I would die for you, I would lie for you
+Keep it real with you, I would kill for you, my baby
+I'm just sayin', yeah
+I would die for you, I would lie for you
+Keep it real with you, I would kill for you, my baby
+Na-na-na, na-na-na, na-na-na
+
+[Chorus]
+Even though we're goin' through it
+And it makes you feel alone
+Just know that I would die for you
+Baby, I would die for you, yeah
+The distance and the time between us
+It'll never change my mind 'cause
+Baby, I would die for you
+Baby, I would die for you, yeah (Oh, babe)</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-31">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-30">&larr; Prev</a><a href="#song-32">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">31. Is There Someone Else?</h3>
+      <div class="lyrics">[Verse 1]
+I know that you're hiding something from me
+That's been close to your heart
+And I felt it creepin' up every day
+Baby, right from the start
+I know that look you give when we're fighting (Fighting)
+We're fighting (Fighting)
+'Cause I used to be the one who was lying (Lying)
+Oh, lying (Lying)
+
+[Chorus]
+Oh, is there someone else or not?
+'Cause I wanna keep you close
+I don't wanna lose my spot
+'Cause I need to know
+If you're hurting him, or you're hurting me
+If I ain't with you, I don't wanna be
+Is there someone else or not?
+Ooh, or not?
+
+[Verse 2]
+I don't deservе someone loyal to me
+Don't you think I see?
+And I don't want to bе a prisoner to who I used to be
+I swear I changed my ways for the better, the better
+'Cause I wanna be with you forever, forever
+
+[Chorus]
+Oh, is there someone else or not?
+'Cause I wanna keep you close
+I don't wanna lose my spot
+'Cause I need to know
+If you're hurting him, or you're hurting me
+If I ain't with you, I don't wanna be
+Is there someone else or not?
+Ooh, or not?</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-32">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-31">&larr; Prev</a><a href="#song-33">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">32. Wicked Games</h3>
+      <div class="lyrics">[Intro]
+Woah, woah, ehh
+
+[Verse 1]
+I left my girl back home
+I don't love her no more
+And she'll never fucking know that
+These fucking eyes that I'm staring at
+Let me see that ass
+Look at all this cash
+And I emptied out my cards too
+Now I'm fucking leaning on that
+
+[Pre-Chorus]
+Bring your love, baby, I could bring my shame
+Bring the drugs, baby, I could bring my pain
+I got my heart right here
+I got my scars right here
+Bring the cups, baby, I could bring the drank
+Bring your body, baby, I could bring you fame
+And that's my motherfucking words too
+Just let me motherfucking love you
+
+[Chorus]
+Listen, ma, I'll give you all I got
+Get me off of this, I need confidence in myself (Yeah, yeah, yeah, ohh, yeah)
+Ohh, listen, ma, I'll give you all of me
+Give me all of it, I need all of it to myself (Woah, woah)
+So tell me you love me
+(Only for tonight, only for the night)
+Even though you don't love me (Ohh, ohh)
+Just tell me you love me
+(I'll give you what I need, I'll give you all of me) (Oh, oh, yeah)
+Even though you don't love me (Ohh, yeah, yeah, ohh, yeah, yeah)
+
+[Verse 2]
+Let me see you dance
+I love to watch you dance
+Take you down another level
+And get you dancing with the Devil
+Take a shot of this
+But I'm warning you
+I'm on that shit that you can't smell, baby
+So, put down your perfume
+
+[Pre-Chorus]
+Bring your love, baby, I could bring my shame
+Bring the drugs, baby, I could bring my pain
+Oh, I got my heart right here
+Oh, I got my scars right here
+Bring the cups, baby, I could bring the drank
+Bring your body, baby, I could bring you fame
+And that's my motherfucking words too, ayy
+So let me motherfucking love you
+
+[Chorus]
+Listen, ma, I'll give you all I got
+Get me off of this (off of this), I need confidence (confidence) in myself (Ooh, eh, ehh)
+Listen, ma, I'll give you all of me (Ooh)
+Give me all of it, I need all of it to myself (I need all of it)
+So tell me you love me, yeah
+(Only for tonight, only for the night)
+Even though you don't love me (Ohh, ohh)
+Just tell me you love me
+(I'll give you what I need, I'll give you all of me)
+Even though you don't love me (Ohh, ohh)
+Ohh</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-33">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-32">&larr; Prev</a><a href="#song-34">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">33. Call Out My Name</h3>
+      <div class="lyrics">[Verse 1]
+We found each other
+I helped you out of a broken place
+You gave me comfort
+But falling for you was, my mistake
+
+[Pre-Chorus]
+I put you on top, I put you on top
+I claimed you so proud, and openly
+And when times were rough, when times were rough
+I made sure I held, you close, to me
+
+[Chorus]
+So call out my name (Call out my name)
+Call out my name when, I kiss you, so gently
+I want you to stay (Want you to stay)
+I want you to stay even, though you, don't want me
+Girl, why can't you wait? (Why can't you wait, baby?)
+Girl, why can't you wait ’til, I fall out, of love?
+Won’t, you call out my name? (Call out my name―hey)
+Girl, call out my name, and, I'll be on, my way and
+I'll be on my—
+
+[Verse 2]
+I said I didn't feel nothing, baby, but I lied
+I almost cut a piece of myself, for your life
+Guess I was just another pit stop
+'Til you made up your mind
+You just wasted my time (Ooh)
+
+[Pre-Chorus]
+You were on top, I put you on top
+I claimed you so proud, and openly, babe (Ooh)
+And when times were rough, when times were rough
+I made sure I held, you close, to me
+
+[Chorus]
+So call out my name (Call out my name, baby)
+So call out my name when I kiss you so gently (Ohhh)
+I want you to stay (I want you to stay)
+I want you to stay even, though you, don't want me
+Girl, why can't you wait? (Girl, why can't you wait 'til I?)
+Girl, why can't you wait ’til, I fall out, of loving? (I love you)
+Babe, call out my name (Say call out my name, baby)
+Girl, call out my name and, I'll be on, my way
+And, I'll be on my—
+
+[Outro]
+On my way, on my way (Oh, oh, oh)
+On my way, on my way, ooh
+On my way, on my way, on my way
+On my way, on my way, on my way
+(On my)</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-34">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-33">&larr; Prev</a><a href="#song-35">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">34. The Abyss</h3>
+      <div class="lyrics">[Verse 1: The Weeknd]
+I tried my best to not let you go
+I don't like the view from halfway down
+Just promise me that it won't be slow
+Will I feel the impact of the ground?
+I tried to be something that I'll never be
+Why waste another precious hour?
+Why waste another precious ounce?
+I'd rather leave somewhat of a legacy
+Familiar
+A thought that's so familiar.
+
+[Chorus: The Weeknd]
+Let me close my eyes with dignity
+Let's end it all, the world's not far behind
+So what's the point of staying?
+It's going up in flames, I know
+Yes, I know, ooh
+Oh-oh-oh
+
+[Segue: Lana Del Rey]
+Hey-hey
+Oh-oh
+(Hey)
+
+[Verse 2: The Weeknd]
+Just hold my heartbeat close to you
+Remember how it always beats for you
+I'm falling at the speed of light
+I'm staring at your shrinking face, don't cry
+You know my heart belongs to you
+One last time, say that you want me too
+The only words that gave me life
+Now I'll see you on the other side
+
+[Bridge: The Weeknd]
+Oh-oh, oh-oh, oh-oh
+Oh-oh, oh-oh, oh-oh
+Oh-oh, oh-oh, oh-oh
+Oh-oh, oh-oh, oh-oh
+
+[Outro: Lana Del Rey & The Weeknd]
+Oh, mama, I'll pray
+I'm running away
+Oh-oh
+Hey-hey (Oh, no)
+Oh-oh
+Hey-hey
+Is a threat not a promise? (Mmm)
+If you're looking for rage (Mmm, oh)
+If you're looking for ragin'
+Quiet for days
+Baby you're running away
+Ayy-yeah
+It's a threat, not a promise
+It's a threat, not a promise
+Yeah-yeah
+Ah-ha (Oh)
+Ah-ha (Oh)
+Ah-ha
+Ah-ha
+Mama, I'll pray
+Mama, I'll pray</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-35">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-34">&larr; Prev</a><a href="#song-36">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">35. Save Your Tears</h3>
+      <div class="lyrics">[Intro]
+Ooh
+Na-na, yeah
+
+[Verse 1]
+I saw you dancing in a crowded room (Uh)
+You look so happy when I'm not with you
+But then you saw me, caught you by surprise
+A single teardrop falling from your eye
+
+[Refrain]
+I don't know why I run away
+I make you cry when I run away.
+
+[Verse 2]
+You could've asked me why I broke your heart
+You could've told me that you fell apart
+But you walked past me like I wasn't there
+And just pretended like you didn't care
+
+[Refrain]
+I don't know why I run away
+I make you cry when I run away
+
+[Pre-Chorus]
+Take me back 'cause I wanna stay
+Save your tears for another
+
+[Chorus]
+Save your tears for another day
+Save your tears for another day (So)
+
+[Verse 3]
+I made you think that I would always stay
+I said some things that I should never say
+Yeah, I broke your heart like someone did to mine
+And now you won't love me for a second time
+
+[Refrain]
+I don't know why I run away, oh, girl
+Said, I make you cry when I run away
+
+Pre-Chorus]
+Girl, take me back 'cause I wanna stay
+Save your tears for another
+I realize that I'm much too late
+And you deserve someone better
+
+[Chorus]
+Save your tears for another day (Oh yeah)
+Save your tears for another day (Yeah)
+
+[Refrain]
+I don't know why I run away
+I'll make you cry when I run away
+
+[Chorus]
+Save your tears for another day
+Ooh, girl, I said (Ah)
+Save your tears for another day (Ah)
+
+[Outro]
+Save your tears for another day (Ah)
+Save your tears for another day (Ah)</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-36">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-35">&larr; Prev</a><a href="#song-37">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">36. Less Than Zero</h3>
+      <div class="lyrics">[Verse 1]
+Remember I was your hero, yeah
+I'd wear your heart like a symbol
+I couldn't save you from my darkest truth of all
+I know
+I'll always be less than zero
+Oh, yeah
+You tried your best with me, I know
+I couldn't face you with my darkest truth of all
+Oh
+
+[Chorus]
+'Cause I can't get it out of my head
+No, I can't shake this feeling that crawls in my bed
+I try to hide it, but I know you know me
+I try to fight it, but I'd rather be free
+Oh
+
+[Verse 2]
+Oh yeah
+Can we meet in the middle?
+Oh yeah
+'Cause you were just like me before
+Now you'd rather leavе me
+Than to watch me die in your arms, oh
+
+[Chorus]
+But I can't gеt it out of my head
+No, I can't shake this feeling that crawls in my bed
+I try to hide it, but I know you know me
+I try to fight it, but I'd rather be free
+Oh woah, oh
+
+[Bridge]
+(I can't get it out of my head)
+(No, I can't shake this feeling that crawls in my bed)
+(I try, I try)
+(I try, I try)
+
+[Chorus]
+I can't get it out of my head
+No, I can't shake this feeling that crawls in my bed
+I try to hide it, but I know you know me (Know you know me)
+I try to fight it, but I'd rather be free
+
+[Outro]
+Yeah
+I'll always be less than zero
+You tried your best with me, I know</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-37">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-36">&larr; Prev</a><a href="#song-38">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">37. Blinding Lights</h3>
+      <div class="lyrics">[Intro]
+Yeah
+
+[Verse 1]
+I've been tryna call
+I've been on my own for long enough
+Maybe you can show me how to love, maybe
+I'm goin' through withdrawals
+You don't even have to do too much
+You can turn me on with just a touch, baby
+
+[Pre-Chorus]
+I look around and
+Sin City's cold and empty (Oh)
+No one's around to judge me (Oh)
+I can't see clearly when you're gone
+
+[Chorus]
+I said, ooh, I'm blinded by the lights
+No, I can't sleep until I feel your touch (Touch)
+I said, ooh, I'm drowning in the night
+Oh, when I'm like this, you're the one I trust
+Hey, hey, hey
+
+[Verse 2]
+I'm running out of time
+'Cause I can see the sun light up the sky
+So I hit the road in overdrive, baby, oh
+
+[Pre-Chorus]
+The city's cold and empty (Oh)
+No one's around to judge me (Oh)
+I can't see clearly when you're gone
+
+[Chorus]
+And I said, ooh, I'm blinded by the lights
+No, I can't sleep until I feel your touch (Touch)
+I said, ooh, I'm drowning in the night
+Oh, when I'm like this, you're the one I trust
+
+[Bridge]
+I'm just coming back to let you know (Back to let you know)
+I could never say it on the phone (Say it on the phone)
+Will never let you go this time (Ooh)
+
+[Chorus]
+I said, ooh, I'm blinded by the lights
+No, I can't sleep until I feel your touch (Touch)
+Hey, hey, hey
+
+[Post-Chorus]
+Hey, hey, hey
+
+[Outro]
+I said, ooh, I'm blinded by the lights
+No, I can't sleep until I feel your touch</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-38">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-37">&larr; Prev</a><a href="#song-39">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">38. Adaptation</h3>
+      <div class="lyrics">[Intro]
+When the sun comes up, you're searching for a love
+So your heart won't lead you to anyone
+When the sun goes down, I know what you become
+You become awake, unlike the rest of us
+
+[Sample]
+The afternoon has gently passed me by
+The evening spreads its sail against the sky
+Waiting for tomorrow
+Just another day
+As I bid yesterday goodbye
+
+[Verse 1]
+I lay my head on a thousand beds
+It's been a test to see how far a man
+Can go without himself
+I think I lost the only piece that held it all in place
+Now my madness is the only love I let myself embrace
+I could've stayed
+
+[Chorus]
+But I chose the lie
+I chose the life
+Then I realized
+She might've been the one
+I let it go
+For a little fun
+I made a trade
+Gave away our days
+For a little fame
+Now I'll never see your face
+But it's okay, I adapted anyway
+
+[Verse 2]
+Adapted to these models
+Who's adapted to the bottle
+They take it down like water
+Just to burn away their sorrows
+I'll stay up ‘til tomorrow
+Just to tear down all their morals
+And all is fair in Love and War
+She's pure
+So pure, like the love that's so uncut and raw
+And clean, so clean, as opposed to what I offered
+
+[Chorus]
+Because I chose the lie
+I chose the life
+Then I realized
+She might've been the one
+I let it go
+For a little fun
+I made a trade
+Gave away our days
+For a little fame
+Now I'll never see your face
+But it's okay, I adapted anyway
+
+[Bridge]
+She might just be the one
+She might just be the one (Oh, baby)
+She might just be the one
+She might just be the one
+
+[Sample]
+The afternoon has gently passed me by
+The evening spreads its sail against the sky
+Waiting for tomorrow
+Just another day
+God bid yesterday goodbye</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-39">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-38">&larr; Prev</a><a href="#song-40">Next &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">39. House of Balloons</h3>
+      <div class="lyrics">[Intro]
+Woah, Woah-oh-oh-oh-oh-oh-oh
+Uh
+Uh huh
+Yeah-eah
+
+[Verse 1]
+Been on a further level since you came, no more pain
+You look into my eyes, you can't recognize my face
+You're in my world now, you can stay, you can stay
+But you belong to me, ooh, you belong to me
+
+[Pre-Chorus]
+If it hurts to breathe, open a window (Woo-ooh)
+Oh, your mind wants to leave (Yeah), but you can't go, oh
+
+[Chorus]
+This is a happy house (A happy house)
+We're happy here (We're happy here)
+In a happy house
+Oh, this is fun, fun, fun, fun
+Fun, fun, fun, fun
+Fun, fun, fun, fun
+Woah
+Woah, Woah-Oh-Oh-Oh-Oh-Oh-Oh
+
+[Verse 2]
+Music got you lo-o-ost
+Nights pass so much quicker than the days did
+Same clothes, you ain't ready for your day shift
+This place will burn you u-u-up
+Baby, it's okay, them my niggas next door
+And they working in the trap, so get naughty if you want
+So blame it on me that you didn't call you home
+Oh, just don't blame it on me girl, 'cause you wanted to have fun
+
+[Pre-Chorus]
+If it hurts (Woo, woo) to breathe, open a window (Yeah, yeah, yeah)
+Oh, your mind wants to leave, but you can't go (Ooh)
+
+[Chorus]
+This is a happy house
+We're happy here in a happy house
+Oh, this is fun, fun, fun, fun (This is fun)
+Fun, fun, fun, fun (This is fun to me)
+Fun, fun, fun, fun
+Woah (Woah)
+Woah, Woah-oh-oh-oh-oh-oh-oh
+
+[Part II: Glass Table Girls]
+
+[Segue]
+Bring the 707 out
+Bring the 707 out
+Bring the 707 out
+Bring the 707 out
+Bring the 707 out
+Bring the 7
+
+[Verse]
+Two puffs for the lady who be down for that
+Whatever, together
+Bring your own stash of the greatest, trade it
+Roll a dub, burn a dub, cough a dub, taste it
+Then watch us chase it
+With a handful of pills, no chasers
+Jaw clenching on some super-sized papers
+She bad and her head bad
+Escaping, her van is a Wonderland
+And it's half-past six
+Read skies 'cause time don't exist
+But when the stars shine back to the crib
+Superstar lines back at the crib
+And we can test out the tables
+We got some brand new tables
+All glass and it's four feet wide
+But it's a must to get us ten feet high
+She give me sex in a handbag
+I get her wetter than a wet nap
+And no closed doors
+So I listen to her moans echo
+"I heard he do drugs now"
+You heard wrong, I been on it for a minute
+We just never act a fool, that's just how we fuckin' live it
+And when we act a fool, it's probably 'cause we mixed it
+Yeah, I'm always on that okey-dokey
+Them white boys know the deal, ain't no fuckin' phony
+Big O know the deal, he the one who showed me
+Watch me ride this fucking beat like he fuckin' told me
+"Is that your girl, what's her fucking story?"
+"She kinda bad but she ride it like a fucking pony"
+I cut down on her man, be her fuckin' story
+Yeah, I'm talking 'bout you, man, get to know me
+Ain't no offense, though, I promise you
+If you a real man, dude, you gon' decide the truth
+But I'm a nice dude with some nice dreams
+And we could turn this to a nightmare: Elm Street</div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="song">
+      <h3 class="song-title">39. Moth to a Flame</h3>
+      <div class="lyrics">[Intro]
+Oh-woah
+Woah-oh-oh
+Woah
+
+[Verse]
+Like a moth to a flame
+I'll pull you in, I pulled you back to
+What you need initially
+It's just one call away
+And you'll leave him, you're loyal to me
+But this time, I let you be
+
+[Pre-Chorus]
+'Cause he seems like he's good for you
+And he makes you feel like you should
+And all your friends say he's the one
+His love for you is true
+
+[Chorus]
+But does he know you call me when he sleeps?
+But does he know the pictures that you keep?
+But does he know the reasons that you cry?
+Or tell me, does he know where your heart lies?
+Where it truly lies
+
+Interlude]
+Yeah
+You should be with him, I let you go from time
+You should stay with him
+
+[Pre-Chorus]
+'Cause he seems like he's good for you
+And he makes you feel like you should
+And all your friends say he's the one
+His love for you is true (Hey)
+
+[Chorus]
+But does he know you call me when he sleeps? (No, no)
+But does he know the pictures that you keep? (Oh)
+But does he know the reasons that you cry?
+Or tell me, does he know where your heart lies?
+Where it truly lies
+
+[Outro]
+Right here with me, babe
+Where it truly lies
+My bed, babe
+Where it truly lies
+In my arms, babe
+Where it truly lies
+Where it truly lies
+Where it truly lies
+(Hey)
+Where it truly lies</div>
+    </div>
+  </section>
+
+  <section class="page" id="song-40">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-39">&larr; Prev</a><a href="#colophon">End &rarr;</a></div>
+    </div>
+    <div class="song">
+      <h3 class="song-title">40. Moth to a Flame</h3>
+      <div class="lyrics">[Intro]
+Oh-woah
+Woah-oh-oh
+Woah
+
+[Verse]
+Like a moth to a flame
+I'll pull you in, I pulled you back to
+What you need initially
+It's just one call away
+And you'll leave him, you're loyal to me
+But this time, I let you be
+
+[Pre-Chorus]
+'Cause he seems like he's good for you
+And he makes you feel like you should
+And all your friends say he's the one
+His love for you is true
+
+[Chorus]
+But does he know you call me when he sleeps?
+But does he know the pictures that you keep?
+But does he know the reasons that you cry?
+Or tell me, does he know where your heart lies?
+Where it truly lies
+
+Interlude]
+Yeah
+You should be with him, I let you go from time
+You should stay with him
+
+[Pre-Chorus]
+'Cause he seems like he's good for you
+And he makes you feel like you should
+And all your friends say he's the one
+His love for you is true (Hey)
+
+[Chorus]
+But does he know you call me when he sleeps? (No, no)
+But does he know the pictures that you keep? (Oh)
+But does he know the reasons that you cry?
+Or tell me, does he know where your heart lies?
+Where it truly lies
+
+[Outro]
+Right here with me, babe
+Where it truly lies
+My bed, babe
+Where it truly lies
+In my arms, babe
+Where it truly lies
+Where it truly lies
+Where it truly lies
+(Hey)
+Where it truly lies</div>
+    </div>
+  </section>
+
+  <!-- Colophon / Copyright Section -->
+  <section class="page" id="colophon">
+    <div class="page-nav">
+      <a href="#tracklist">&larr; Tracklist</a>
+      <div class="nav-links"><a href="#song-40">&larr; Prev</a></div>
+    </div>
+    <div class="copyright">
+      &copy; 2026 [NimsJaytsay]<br>
+      These lyrics are original fiction inspired by the mood and themes of a Tokyo concert setlist.<br>
+      They are not official lyrics and are not affiliated with The Weeknd, XO, or any record label.
+    </div>
+  </section>
+
+  <!-- Screen Hash Switcher -->
+  <script>
+    function updatePageView() {
+      const hash = window.location.hash.replace('#', '') || 'cover';
+      const pages = document.querySelectorAll('.page');
+      let target = document.getElementById(hash);
+
+      if (!target) {
+        target = document.getElementById('cover');
+      }
+
+      pages.forEach(p => p.classList.remove('active'));
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    window.addEventListener('hashchange', updatePageView);
+    window.addEventListener('DOMContentLoaded', updatePageView);
+  </script>
+
+</body>
+</html>
